@@ -633,3 +633,31 @@ input, textarea {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8); /* 加上深色陰影讓文字跳出來 */
   filter: drop-shadow(0 0 10px rgba(245, 200, 66, 0.6));
 }
+/* ══════════════════════════════════
+   YouTube 嵌入影片響應式容器
+══════════════════════════════════ */
+.video-embed-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 比例 */
+  height: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid var(--border2);
+  background: var(--card);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  margin-bottom: 10px;
+}
+
+.video-embed-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-embed-container:hover {
+  border-color: var(--gold);
+}
