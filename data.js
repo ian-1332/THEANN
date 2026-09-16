@@ -7,7 +7,7 @@ const STAT_NAMES = {speaking:'口條', reflex:'臨場', data:'數據', term:'術
 function getTimerByDifficulty(phase) {
   if (phase === '預賽')   return { seconds: 25, label: '簡單', cls: 'diff-easy',   mult: 1.0 };
   if (phase === '準決賽') return { seconds: 18, label: '進階', cls: 'diff-normal', mult: 1.2 };
-  if (phase === '決賽')   return { seconds: 12, label: '困難', cls: 'diff-hard',   mult: 1.5 };
+  if (phase === '決賽')   return { seconds: 10, label: '困難', cls: 'diff-hard',   mult: 1.5 };
   return                          { seconds: 15, label: '普通', cls: 'diff-normal', mult: 1.0 };
 }
 // ═══ 三位導師定義 ═══
@@ -274,22 +274,24 @@ const VARIANTS = [
 const QUESTION_POOL = [
 // ── 預賽 ──
 {id:'q_pre1', phase:'預賽', match:'統一獅 vs 富邦悍將',
- label:'3局上・陳鏞基中外野安打先制',
- q:'3局上 Rakuten 攻佔一二壘，第3棒 DH 陳鏞基擊出中外野平飛安打帶有 1 分打點，二壘跑者邱智呈輕鬆回本壘，獅隊 1:0 先馳得點！你如何播報這記先制分？',
+ label:'3局上・陳鏞基中外野安打突破僵局',
+ img:'C:\\新增資料夾\\題目測試\\assets\\q1.png', // 👈 
+ q:'請看圖說故事，你如何播報這記得分？',
  roleBonus:{'v25':{optType:'A',bonus:{speaking:8,term:5}},'v30':{optType:'A',bonus:{speaking:8,term:5}}},
  options:[
-  {text:'「中外野平飛安打！穿透防線！二壘跑者邱智呈輕鬆回本壘，統一獅 1 比 0 先馳得點！」',type:'A',effect:{speaking:-3,reflex:5,data:8,term:10,tension:5},social:{ptt:80,fans:1500}},
+  {text:'「把握得點圈機會，打穿防線！二壘跑者邱智呈輕鬆回本壘，統一獅 1 比 0 先馳得點！」',type:'A',effect:{speaking:-3,reflex:5,data:8,term:10,tension:5},social:{ptt:80,fans:1500}},
   {text:'「這投手太甜了！根本白白送分！投手到底在投什麼！」',type:'B',effect:{speaking:15,reflex:8,data:-12,term:-10,tension:-18},social:{ptt:250,fans:-2500}},
-  {text:'「先制分到手！陳鏞基今晚狀態燙，接下來必定繼續開轟！」',type:'C',effect:{speaking:10,reflex:-5,data:-14,term:-12,tension:12},social:{ptt:180,fans:1000}}
+  {text:'「成功突破僵局！陳鏞基今晚狀態火燙，期待他的表現！」',type:'C',effect:{speaking:10,reflex:-5,data:-14,term:-12,tension:23},social:{ptt:180,fans:1000}}
 ]},
 
 {id:'q_pre2', phase:'預賽', match:'統一獅 vs 富邦悍將',
- label:'4局上・陳傑憲右外野安打得2分',
- q:'4局上滿壘局面，第2棒 LF 陳傑憲擊出右外野滾地安打，送回三壘跑者李丞齡與二壘跑者陳聖平共 2 分！比數來到 4:0！你如何精準交代這次多分打點的播報？',
+ label:'得點圈有人局面，擊出雙殺打中斷攻勢',
+ img:'C:\\新增資料夾\\題目測試\\assets\\q2.jpg', // 
+ q:'請看圖說故事，你如何播報這記得分？',
  roleBonus:{'v1':{optType:'C',bonus:{fans:2500,speaking:8}},'v7':{optType:'A',bonus:{term:8,speaking:5}}},
  options:[
   {text:'「右外野安打穿越！帶有兩分打點！三壘跑者李丞齡、二壘跑者陳聖平接連回來！統一獅 4 比 0 大幅領先！」',type:'A',effect:{speaking:-3,reflex:5,data:8,term:12,tension:8},social:{ptt:80,fans:1500}},
-  {text:'「完全擋不住四爺！這顆肉包球根本白白送分！悍將守備到底在看什麼！」',type:'B',effect:{speaking:15,reflex:8,data:-12,term:-10,tension:-18},social:{ptt:250,fans:-2500}},
+  {text:'「完全擋不住四爺！這顆肉包球根本白白送分！」',type:'B',effect:{speaking:15,reflex:8,data:-12,term:-10,tension:-18},social:{ptt:250,fans:-2500}},
   {text:'「看吧神準命中！這就是台灣隊長的巨星價值！下一棒繼續轟！」',type:'C',effect:{speaking:10,reflex:-5,data:-14,term:-12,tension:12},social:{ptt:180,fans:1000}}
 ]},
 
@@ -306,7 +308,7 @@ const QUESTION_POOL = [
 
 {id:'q_semi2', phase:'準決賽', match:'Rakuten Monkeys vs 富邦悍將',
  label:'8局下・申皓瑋安打終結零封夢',
- q:'8局下富邦悍將終於反擊，第7棒 LF 申皓瑋擊出右外野安打帶有 1 分打點，三壘跑者范國宸回本壘，悍將追成 1:6！比賽出現懸念，你如何掌控「氣氛由鬆轉緊」的微妙節點？',
+ q:'8局下富邦悍將終於反擊，第7棒大寶寶擊出右外野安打帶有 1 分打點，三壘跑者隊長跑回本壘，城堡隊追成 1:2！比賽還沒結束，你如何掌控「氣氛由鬆轉緊」的微妙節點？',
  roleBonus:{'v18':{optType:'A',bonus:{tension:8,reflex:5}},'v32':{optType:'C',bonus:{fans:2500,speaking:8}}},
  options:[
   {text:'「申皓瑋頂住壓力！右外野方向落地安打！三壘跑者回來得分！富邦破蛋追成一分落後，比賽還有懸念！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:100,fans:2000}},
@@ -359,7 +361,7 @@ const SPECIAL_POOL = [
 ]},
 
 {id:'s02',label:'場外事件：前輩的施壓',isEvent:true,
- q:'前明星球星路過你的座位，看了一眼你的戰術筆記冷冷說：「這種記法太外行了。」你選擇？',
+ q:'前球星路過你的座位，看了一眼你的戰術筆記冷冷說：「這種記法太外行了。」你選擇？',
  roleBonus:{'v12':{optType:'B',bonus:{fans:2000,speaking:8}},'v7':{optType:'A',bonus:{data:8,term:8}}},
  options:[
   {text:'不服氣回嗆：「不然你來教我啊？」',type:'B',effect:{speaking:10,reflex:-8,tension:-15},social:{ptt:150,fans:-1200}},
@@ -368,12 +370,12 @@ const SPECIAL_POOL = [
 ]},
 
 {id:'s05',label:'場外事件：深夜 PTT 爆料文',isEvent:true,
- q:'半夜滑 PTT 發現一篇明顯影射你的爆料文：「某素人選手私底下耍大牌」，你決定？',
+ q:'半夜被爆料，與某隊選手深夜共進消夜，你會怎麼面對？',
  roleBonus:{'v18':{optType:'A',bonus:{tension:10,reflex:5}},'v15':{optType:'A',bonus:{tension:8,reflex:5}}},
  options:[
-  {text:'立刻開小號在底下與鄉民對罵 300 樓。',type:'B',effect:{speaking:-12,reflex:-18,tension:-28},social:{ptt:500,fans:-6000}},
-  {text:'關掉手機沉睡，明天用完美播報打臉爆料者。',type:'A',effect:{speaking:12,reflex:12,tension:22,data:5},social:{ptt:-60,fans:5000}},
-  {text:'心情大受打擊，躲在棉被裡哭了一整晚。',type:'C',effect:{speaking:-10,tension:-18,reflex:5},social:{ptt:80,fans:-800}}
+  {text:'立刻開小號在底下護航。',type:'B',effect:{speaking:-12,reflex:-18,tension:-28},social:{ptt:500,fans:-6000}},
+  {text:'關掉手機沉睡，當作沒這件事。',type:'A',effect:{speaking:2,reflex:12,tension:22,data:5},social:{ptt:-60,fans:-5000}},
+  {text:'心情大受打擊，這明明就是抹黑，躲在棉被裡哭了一整晚。',type:'C',effect:{speaking:-10,tension:-20,reflex:5},social:{ptt:80,fans:-800}}
 ]},
 
 {id:'s08',label:'場外事件：被對手粉絲出征',isEvent:true,
@@ -395,7 +397,7 @@ const SPECIAL_POOL = [
 ]},
 
 {id:'s16',label:'場外事件：桃色風波',isEvent:true,
- q:'有八卦媒體拍到你和某位選手深夜在便利商店買宵夜，隔天標題是「曖昧確定？節目選手深夜幽會」，你怎麼處理？',
+ q:'有八卦媒體拍到你和其他選手在電影院手牽手，隔天標題是「曖昧確定？選手假日幽會」，你怎麼處理？',
  roleBonus:{'v2':{optType:'B',bonus:{fans:5000,speaking:5}},'v11':{optType:'B',bonus:{fans:4000}}},
  options:[
   {text:'馬上開直播解釋，越說越激動，最後哭出來被截圖。',type:'B',effect:{speaking:-8,tension:-22,reflex:-5},social:{ptt:600,fans:5000}},

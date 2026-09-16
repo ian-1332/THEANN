@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>THE ANNOUNCER</title>
+<title>DAZN THE ANNOUNCER</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,9 +12,9 @@
 <!-- ───── SETUP ───── -->
 <div id="setup-screen" class="screen active">
   <div class="game-header">
-    <div class="logo">DAZN Original</div>
-    <h1>THE ANNOUNCER</h1>
-    <p>36 變體角色 × 主播養成實境選秀</p>
+    <div class="logo">DAZN ORIGINAL</div>
+    <h1>DAZN THE ANNOUNCER</h1>
+    <p>主播養成實境選秀</p>
   </div>
 
   <div class="setup-card">
@@ -28,20 +28,22 @@
       <input type="number" id="user-age" class="input-field"
         placeholder="例如：25" min="16" max="70">
     </div>
+    
     <div class="input-group">
       <label>性別</label>
       <div class="gender-row">
-        <button class="gender-btn active" data-gender="male">⚡ 男</button>
-        <button class="gender-btn" data-gender="female">✨ 女</button>
-        <button class="gender-btn" data-gender="other">🌀 不透露</button>
+        <button type="button" class="gender-btn active" data-gender="male">⚡ 男</button>
+        <button type="button" class="gender-btn" data-gender="female">✨ 女</button>
+        <button type="button" class="gender-btn" data-gender="other">🌀 不透露</button>
       </div>
     </div>
+
     <div class="input-group" style="margin-bottom:0;">
-      <label>種子碼</label>
+      <label for="seed-input">種子碼</label>
       <div class="seed-input-row">
         <input type="text" id="seed-input" class="input-field seed-field"
           placeholder="輸入或隨機生成" maxlength="6">
-        <button class="btn-seed-roll" id="seed-roll-btn">🎲 隨機</button>
+        <button type="button" class="btn-seed-roll" id="seed-roll-btn">🎲 隨機</button>
       </div>
       <div class="seed-hint">種子碼決定你的角色背景與場外事件組合</div>
     </div>
@@ -52,8 +54,8 @@
     <div class="mentor-select-card" data-mentor="qianyeye">
       <div class="mentor-select-icon">🧮</div>
       <div class="mentor-select-name">錢爺爺</div>
-      <div class="mentor-select-title">專業數據流導師</div>
-      <div class="mentor-select-desc">冰冷嚴格，用數據說話。容不得選手憑直覺胡亂瞎掰。</div>
+      <div class="mentor-select-title">熱情系導師</div>
+      <div class="mentor-select-desc">巨大聲量，激情四射。</div>
       <div class="mentor-select-bonus">
         <span class="msb-chip msb-up">數據 +10</span>
         <span class="msb-chip msb-up">術語 +10</span>
@@ -86,7 +88,7 @@
     </div>
   </div>
 
-  <button class="btn-primary" id="enter-btn" disabled>確認身分，進入選秀戰場</button>
+  <button type="button" class="btn-primary" id="enter-btn" disabled>確認身分，進入選秀戰場</button>
   <p class="setup-note">共 7 節點（5 主關 + 2 隨機場外事件）· 任一戰力歸零即遭淘汰</p>
 </div>
 
@@ -107,7 +109,7 @@
     <div class="intro-mentor-name" id="intro-mentor-name"></div>
     <div class="intro-title">THE ANNOUNCER</div>
     <div class="intro-countdown" id="intro-countdown"></div>
-    <button class="intro-enter-btn" id="intro-enter-btn" style="display:none;">
+    <button type="button" class="intro-enter-btn" id="intro-enter-btn" style="display:none;">
       ▶ 開始播報
     </button>
   </div>
@@ -161,10 +163,10 @@
   </div>
 
   <div class="social-panel">
-    <div class="social-card sc-ptt">
-      <div class="sc-label"><span>📋</span>PTT 討論度</div>
-      <div class="sc-val" id="ptt-val">0<span class="sc-val-unit">則</span></div>
-      <div class="social-trend" id="ptt-trend">—</div>
+    <div class="social-card sc-rank">
+      <div class="sc-label"><span>🏆</span>目前排名</div>
+      <div class="sc-val" id="rank-val">#1<span class="sc-val-unit">/10</span></div>
+      <div class="social-trend" id="rank-trend">爭奪冠軍中</div>
     </div>
     <div class="social-card sc-fans">
       <div class="sc-label"><span>✨</span>網路人氣</div>
@@ -182,11 +184,18 @@
 
   <div id="match-tag"></div>
   <div class="question-label" id="q-label">—</div>
+
+  <!-- 看圖說故事轉播畫面容器 -->
+  <div class="stage-image-container" id="stage-img-container" style="display:none;">
+    <img id="stage-img" src="" alt="即時轉播畫面">
+    <div class="live-badge-overlay">🔴 LIVE</div>
+  </div>
+
   <div class="question-text"  id="q-text">載入中…</div>
   <div id="options-container"></div>
   <div class="feedback-toast" id="feedback-toast"></div>
   <div class="delta-panel"    id="delta-panel"></div>
-  <button class="btn-primary next-btn" id="next-btn">下一關 →</button>
+  <button type="button" class="btn-primary next-btn" id="next-btn">下一關 →</button>
 </div>
 
 <!-- ───── ELIMINATED ───── -->
@@ -200,9 +209,9 @@
     <h3>📺 看預告片，逆境復活</h3>
     <p>觀看下一季預告，重新點燃鬥志。<br>
     能力將<strong>重置為初始狀態</strong>，只要你能在剩餘關卡爆發，就有機會成為悲劇英雄。</p>
-    <button class="btn-revive" id="revive-btn">觀看預告片並復活 ↗</button>
+    <button type="button" class="btn-revive" id="revive-btn">觀看預告片並復活 ↗</button>
   </div>
-  <button class="btn-secondary" id="elim-end-btn">接受淘汰，查看結果</button>
+  <button type="button" class="btn-secondary" id="elim-end-btn">接受淘汰，查看結果</button>
 </div>
 
 <!-- ───── RESULT ───── -->
@@ -213,13 +222,19 @@
     <div class="result-subtitle" id="r-subtitle"></div>
   </div>
 
+  <div class="divider"></div>
+
+  <div class="section-title">精彩賽事回顧</div>
+  <div class="video-embed-container">
+    <iframe src="https://www.youtube.com/embed/6p3OrZ393D0" 
+            title="THE ANNOUNCER 賽事精華" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+    </iframe>
+  </div>
+
   <div class="section-title">最終輿論聲勢</div>
   <div class="result-social-row">
-    <div class="result-soc-card">
-      <div class="rs-icon">📋</div>
-      <div class="rs-val rs-ptt" id="r-ptt">0</div>
-      <div class="rs-label">PTT 討論則數</div>
-    </div>
     <div class="result-soc-card">
       <div class="rs-icon">✨</div>
       <div class="rs-val rs-fans" id="r-fans">0</div>
@@ -258,19 +273,6 @@
     </div>
   </div>
 
-  <div class="section-title">精彩賽事回顧</div>
-  <div class="video-embed-container">
-    <iframe src="https://www.youtube.com/embed/l0V7oDQAfww" 
-            title="THE ANNOUNCER 賽事精華" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-        allowfullscreen>
-    </iframe>
-  </div>
-
-  <div class="divider"></div>
-
-
-  <!-- 播報風格分析 -->
   <div class="section-title">播報風格分析</div>
   <div class="style-analysis-card" id="style-analysis-card">
     <div class="style-icon" id="style-icon">🎙</div>
@@ -281,9 +283,8 @@
 
   <div class="divider"></div>
 
-  <!-- CTA -->
   <div class="cta-label">想看真正的主播是怎麼播報這場比賽的？</div>
-  <a href="https://www.youtube.com/watch?v=l0V7oDQAfww"
+  <a href="https://www.youtube.com/watch?v=6p3OrZ393D0"
      target="_blank" class="btn-cta-primary">
     🎬 觀看完整節目預告
   </a>
@@ -291,7 +292,7 @@
      target="_blank" class="btn-cta-secondary">
     📺 註冊看完整賽事
   </a>
-  <button class="btn-tertiary" onclick="location.reload()">重新挑戰</button>
+  <button type="button" class="btn-tertiary" onclick="location.reload()">重新挑戰</button>
 </div>
 
 </div><!-- /wrap -->
