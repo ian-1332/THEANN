@@ -275,7 +275,7 @@ const QUESTION_POOL = [
 // ── 預賽 ──
 {id:'q_pre1', phase:'預賽', match:'統一獅 vs 富邦悍將',
  label:'3局上・陳鏞基中外野安打突破僵局',
- img:'./assets/q1.png',
+ img:'assets/q1.png',
  q:'請看圖說故事，你如何播報這記得分？',
  roleBonus:{'v25':{optType:'A',bonus:{speaking:8,term:5}},'v30':{optType:'A',bonus:{speaking:8,term:5}}},
  options:[
