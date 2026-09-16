@@ -275,7 +275,7 @@ const QUESTION_POOL = [
 // ── 預賽 ──
 {id:'q_pre1', phase:'預賽', match:'統一獅 vs 富邦悍將',
  label:'3局上・陳鏞基中外野安打突破僵局',
- img:'C:\\新增資料夾\\題目測試\\assets\\q1.png', // 👈 
+ img:'./assets/q1.png',
  q:'請看圖說故事，你如何播報這記得分？',
  roleBonus:{'v25':{optType:'A',bonus:{speaking:8,term:5}},'v30':{optType:'A',bonus:{speaking:8,term:5}}},
  options:[
@@ -286,7 +286,7 @@ const QUESTION_POOL = [
 
 {id:'q_pre2', phase:'預賽', match:'統一獅 vs 富邦悍將',
  label:'得點圈有人局面，擊出雙殺打中斷攻勢',
- img:'C:\\新增資料夾\\題目測試\\assets\\q2.jpg', // 
+ img:'./assets/q2.jpg',
  q:'請看圖說故事，你如何播報這記得分？',
  roleBonus:{'v1':{optType:'C',bonus:{fans:2500,speaking:8}},'v7':{optType:'A',bonus:{term:8,speaking:5}}},
  options:[
