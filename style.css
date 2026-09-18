@@ -700,3 +700,49 @@ input, textarea {
 .sc-rank .sc-val {
   color: var(--gold);
 }
+/* ══════════════════════════════════
+   結果頁社群與戰績卡三欄並排樣式
+══════════════════════════════════ */
+
+/* 將原本的 2 欄改為 3 欄並排 */
+.result-social-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* 三欄：排名、粉絲、按鈕 */
+  gap: 8px;
+  margin: 18px 0;
+}
+
+/* 戰績卡生成按鈕卡片 */
+.share-card-card {
+  background: linear-gradient(135deg, #181c24, #221c35) !important;
+  border: 1.5px solid var(--purple) !important;
+  border-radius: 10px;
+  padding: 12px 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  font-family: inherit;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-card-card:hover {
+  background: rgba(160, 120, 248, 0.15) !important;
+  border-color: #540be6 !important;
+  box-shadow: 0 0 12px rgba(160, 120, 248, 0.3);
+  transform: translateY(-2px);
+}
+
+.share-card-card:active {
+  transform: scale(0.97);
+}
+
+/* 手機版自動改為單欄直排，避免擠壓 */
+@media (max-width: 480px) {
+  .result-social-row {
+    grid-template-columns: 1fr; 
+  }
+}

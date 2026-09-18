@@ -14,12 +14,12 @@ function getTimerByDifficulty(phase) {
 const MENTORS = {
   qianyeye: {
     id: 'qianyeye', name: '錢爺爺', icon: '🧮',
-    title: '專業數據流導師',
+    title: '熱情系導師',
     likes:      ['data', 'term'],
     dislikes:   ['speaking'],
     optBonus:   'A',
     optPenalty: 'B',
-    initBonus:  { data: 10, term: 10, speaking: -5 }
+    initBonus:  { data: -5, term: 10, speaking: -5 }
   },
   dapangge: {
     id: 'dapangge', name: '大胖哥哥', icon: '📚',
@@ -97,20 +97,19 @@ function seedToNum(seed) {
 // ═══ NPC 生成（強中弱分段，讓玩家平均落在 5–8 名）═══
 function generateNPCs(playerVariant, seed) {
   const n           = seedToNum(seed);
-  const playerTotal = STAT_KEYS.reduce((s, k) => s + playerVariant.stats[k], 0);
   const npcNames    = ['林予涵','陸柏宇','張志豪','方宇翔','趙苡寧','陳冠廷','蘇彥廷','葉芷涵','鄭宇軒'];
 
   return npcNames.map((name, i) => {
     let base;
     if (i < 3) {
       // 強者：總分 340–400（玩家初始約 240–280，強者遠超）
-      base = 340 + ((n * (i + 1) * 37) % 61);
+      base = 380 + ((n * (i + 1) * 37) % 81);
     } else if (i < 7) {
       // 中等：總分 280–340
-      base = 280 + ((n * (i + 1) * 29) % 61);
+      base = 300 + ((n * (i + 1) * 29) % 81);
     } else {
       // 弱者：總分 200–260
-      base = 200 + ((n * (i + 1) * 23) % 61);
+      base = 180 + ((n * (i + 1) * 23) % 81);
     }
     return { name, total: base, base };
   });
@@ -297,13 +296,13 @@ const QUESTION_POOL = [
 
 // ── 準決賽 ──
 {id:'q_semi1', phase:'準決賽', match:'統一獅 vs 富邦悍將',
- label:'7局上・潘傑楷陽春全壘打',
- q:'7局上第6棒 3B 潘傑楷擊出右外野高飛球，球直接飛越全壘打牆！陽春全壘打！比數來到 6:0！這是全場最高潮的一擊，你如何拉高現場氣氛？',
+ label:'七局上，喜歡的球隊逆轉勝，你會怎麼播報',
+ q:'支持的球隊從開賽就被先發投手壓制，在最後一局安打串聯，一吐悶氣成功逆轉比賽，你會怎麼播報？',
  roleBonus:{'v6':{optType:'C',bonus:{fans:3000,speaking:10}},'v9':{optType:'A',bonus:{speaking:8,term:8}}},
  options:[
-  {text:'「這球咬中了！高高飛起！往右外野方向去⋯⋯出去了！潘傑楷轟出陽春全壘打！樂天再添保險分！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:120,fans:3000}},
-  {text:'「全壘打啦！打出去了！投手今天完全投不好！悍將牛棚快換人！」',type:'B',effect:{speaking:18,reflex:10,data:-14,term:-12,tension:-22},social:{ptt:300,fans:-3000}},
-  {text:'「開轟！我就說他今晚手感燙！潘帥完全命中我的預測！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:1500}}
+  {text:'「這球呢！穿越!成功突破封鎖，悶了整天終於打出來了!!」',type:'A',effect:{speaking:-3,reflex:18,data:8,term:12,tension:10},social:{ptt:120,fans:1000}},
+  {text:'「打出去了！成功把握機會，擊出適時一擊」',type:'B',effect:{speaking:8,reflex:2,data:-14,term:-12,tension:-22},social:{ptt:300,fans:-300}},
+  {text:'「我就說他今晚手感燙！完全照著我的腳本走，氣勢都被拉過去了！」',type:'C',effect:{speaking:5,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:150}}
 ]},
 
 {id:'q_semi2', phase:'準決賽', match:'Rakuten Monkeys vs 富邦悍將',
@@ -311,7 +310,7 @@ const QUESTION_POOL = [
  q:'8局下富邦悍將終於反擊，第7棒大寶寶擊出右外野安打帶有 1 分打點，三壘跑者隊長跑回本壘，城堡隊追成 1:2！比賽還沒結束，你如何掌控「氣氛由鬆轉緊」的微妙節點？',
  roleBonus:{'v18':{optType:'A',bonus:{tension:8,reflex:5}},'v32':{optType:'C',bonus:{fans:2500,speaking:8}}},
  options:[
-  {text:'「申皓瑋頂住壓力！右外野方向落地安打！三壘跑者回來得分！富邦破蛋追成一分落後，比賽還有懸念！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:100,fans:2000}},
+  {text:'「頂住壓力！右外野方向落地安打！三壘跑者回來得分！富邦破蛋追成一分落後，比賽還有懸念！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:100,fans:2000}},
   {text:'「終於得分了！整整等八局，這口氣總算吐出來！牛棚快頂住不要再失分！」',type:'B',effect:{speaking:18,reflex:10,data:-14,term:-12,tension:-22},social:{ptt:300,fans:-3000}},
   {text:'「命中破冰！我就說悍將這局一定會追分！接下來要大逆轉了！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:1200}}
 ]},
@@ -366,14 +365,14 @@ const SPECIAL_POOL = [
  options:[
   {text:'不服氣回嗆：「不然你來教我啊？」',type:'B',effect:{speaking:10,reflex:-8,tension:-15},social:{ptt:150,fans:-1200}},
   {text:'虛心請教：「前輩覺得哪裡可以修正？懇請指教。」',type:'A',effect:{data:12,term:12,tension:10,speaking:3},social:{ptt:50,fans:1800}},
-  {text:'把筆記本收起來，當作沒聽見。',type:'C',effect:{tension:5,speaking:3,data:-5},social:{ptt:10,fans:200}}
+  {text:'大翻白眼',type:'C',effect:{tension:5,speaking:3,data:-5},social:{ptt:10,fans:200}}
 ]},
 
 {id:'s05',label:'場外事件：深夜 PTT 爆料文',isEvent:true,
  q:'半夜被爆料，與某隊選手深夜共進消夜，你會怎麼面對？',
  roleBonus:{'v18':{optType:'A',bonus:{tension:10,reflex:5}},'v15':{optType:'A',bonus:{tension:8,reflex:5}}},
  options:[
-  {text:'立刻開小號在底下護航。',type:'B',effect:{speaking:-12,reflex:-18,tension:-28},social:{ptt:500,fans:-6000}},
+  {text:'立刻開小號在底下護航，談戀愛錯了嘛!!!!!',type:'B',effect:{speaking:-12,reflex:-18,tension:-28},social:{ptt:500,fans:-6000}},
   {text:'關掉手機沉睡，當作沒這件事。',type:'A',effect:{speaking:2,reflex:12,tension:22,data:5},social:{ptt:-60,fans:-5000}},
   {text:'心情大受打擊，這明明就是抹黑，躲在棉被裡哭了一整晚。',type:'C',effect:{speaking:-10,tension:-20,reflex:5},social:{ptt:80,fans:-800}}
 ]},
@@ -406,10 +405,10 @@ const SPECIAL_POOL = [
 ]},
 
 {id:'s20',label:'突發狀況：搭檔主播說錯話',isEvent:true,
- q:'你的搭檔主播在直播中把「高飛犧牲打」說成「自殺打」，全場一片靜默，你必須立刻接話，你說什麼？',
+ q:'你的搭檔主播在直播中把「高飛犧牲打」說成「高飛打打打」，全場一片靜默，你必須立刻接話，你說什麼？',
  roleBonus:{'v9':{optType:'A',bonus:{speaking:8,reflex:8}},'v25':{optType:'A',bonus:{speaking:5,reflex:5}}},
  options:[
-  {text:'大笑說：「哈哈我搭檔說了個冷笑話！」把尷尬完全轉移到搭檔身上。',type:'B',effect:{speaking:5,reflex:8,tension:-15,term:-5},social:{ptt:400,fans:2000}},
+  {text:'大笑說：「哈哈我搭檔在裝可愛！」把尷尬完全轉移到搭檔身上。',type:'B',effect:{speaking:5,reflex:8,tension:-15,term:-5},social:{ptt:400,fans:2000}},
   {text:'無縫接話：「也就是說三壘跑者用這支高飛犧牲打順利回本壘得分——」完全覆蓋過去。',type:'A',effect:{speaking:18,reflex:20,tension:12,term:15},social:{ptt:100,fans:3500}},
   {text:'沉默兩秒，尷尬地繼續播報下一球，當作沒聽到。',type:'C',effect:{speaking:-8,reflex:-5,tension:5,term:3},social:{ptt:180,fans:-500}}
 ]},
@@ -424,26 +423,26 @@ const SPECIAL_POOL = [
 ]}
 
 ];
-// ═══ 結局文案 ═══
+
 const ENDINGS = [
   {id:'tragic_hero',
    condition: s => s.wasRevived && s.fans >= 6000,
    rank:'🔥', titleClass:'tragic',
    title:    name => name + ' ── 浴火重生的悲劇英雄',
    subtitle: (name,seed,role,mentor) =>
-     '帶著種子碼 ' + seed + ' 闖關，身為【' + role + '】的你曾在中途遭遇崩潰淘汰，卻展現了無與倫比的韌性。' +
+     '帶著種子碼 ' + seed + ' 闖關，曾在中途遭遇崩潰淘汰，卻展現了無與倫比的韌性。' +
      mentor.icon + ' ' + mentor.name + '對你讚不絕口：「這種逆境中的爆發力，是無法靠訓練得來的。」'},
 
 {id:'champion',
  condition: s => {
    const avg    = s.total / STAT_KEYS.length;
    const hasAce = STAT_KEYS.some(k => s.statValues[k] >= 93);
-   return avg >= 90 && hasAce && s.fans >= 8000 && s.ptt >= 500 && s.ranking <= 3;
+   return avg >= 93 && hasAce && s.fans >= 8321 && s.ptt >= 500 && s.ranking <= 3;
  },
  rank:'🏆', titleClass:'',
  title:    name => name + ' ── DAZN 正式簽約主播！',
  subtitle: (name,seed,role,mentor) =>
-   '種子碼 ' + seed + ' 挑戰成功！身為【' + role + '】的你均衡發展五角戰力，並在某項能力達到頂尖水準，在輿論場與專業考驗中全面制霸，排名衝入前三。' +
+   '種子碼 ' + seed + ' 挑戰成功！你均衡發展五角戰力，並在某項能力達到頂尖水準，在輿論場與專業考驗中全面制霸，排名衝入前三。' +
    mentor.icon + ' ' + mentor.name + '第一個站起來鼓掌：「這就是我要的主播！」'},
 
   {id:'runner_up',
@@ -453,7 +452,7 @@ const ENDINGS = [
    rank:'🥈', titleClass:'',
    title:    name => name + ' ── 準簽約候補主播',
    subtitle: (name,seed,role,mentor) =>
-     '【' + role + '】你的表現非常亮眼，排名穩定維持前五。' +
+     '你的表現非常亮眼，排名穩定維持前五。' +
      mentor.icon + ' ' + mentor.name + '私下告訴製作人：「如果首選因故無法出賽，第一個考慮的就是這位。」種子碼：' + seed},
 
   {id:'specialist',
@@ -461,7 +460,7 @@ const ENDINGS = [
    rank:'🎯', titleClass:'',
    title:    name => name + ' ── 偏科達人，潛力未完全開發',
    subtitle: (name,seed,role,mentor) =>
-     '【' + role + '】你在某些領域表現驚豔，但五角戰力失衡讓評審認為你尚未準備好。' +
+     '你在某些領域表現驚豔，但五角戰力失衡讓評審認為你尚未準備好。' +
      mentor.icon + ' ' + mentor.name + '說：「專長很突出，但要成為合格主播，均衡才是關鍵。」（種子碼：' + seed + '）'},
 
   {id:'trainee',
@@ -470,7 +469,7 @@ const ENDINGS = [
    rank:'🌟', titleClass:'',
    title:    name => name + ' ── 官方潛力培訓主播',
    subtitle: (name,seed,role,mentor) =>
-     '經歷這場選秀洗禮（種子碼 ' + seed + '），身為【' + role + '】的你展現出均衡潛質。' +
+     '經歷這場選秀洗禮（種子碼 ' + seed + '），你展現出均衡潛質。' +
      mentor.icon + ' ' + mentor.name + '點名將你列入培訓名單：「給我半年，我有把握把你練出來。」'},
 
   {id:'internet_star',
@@ -478,8 +477,8 @@ const ENDINGS = [
    rank:'📱', titleClass:'',
    title:    name => name + ' ── 爭議性話題網紅主播',
    subtitle: (name,seed,role,mentor) =>
-     '【' + role + '】你在網路上擁有極高聲量，但' +
-     mentor.icon + ' ' + mentor.name + '搖頭：「人氣不等於實力，五角戰力失衡的問題不解決，上了播報台遲早翻車。」（種子碼：' + seed + '）'},
+     '你在網路上擁有極高聲量，但' +
+     mentor.icon + ' ' + mentor.name + '搖頭：「人氣不等於實力，失衡的問題不解決，上了播報台遲早翻車。」（種子碼：' + seed + '）'},
 
   {id:'failed',
    condition: () => true,
