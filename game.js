@@ -1,0 +1,954 @@
+// ═══════════════════════════════════════
+//  遊戲狀態
+// ═══════════════════════════════════════
+let playerName     = '';
+let playerAge      = '';
+let playerGender   = 'male';
+let selectedMentor = null;
+let currentSeed    = '';
+let currentVariant = null;
+let currentStages  = [];
+let npcs           = [];
+
+let stats        = {};
+let mentorScore  = {};
+let styleCounter = { A: 0, B: 0, C: 0 };
+let fans         = 0;
+let stageIdx     = 0;
+let timer        = null;
+let timeLeft     = 0;
+let answered     = false;
+let pendingElim  = false;
+let hasRevived   = false;
+let wasRevived   = false;
+
+// ═══════════════════════════════════════
+//  畫面切換與進場動畫
+// ═══════════════════════════════════════
+function showScreen(id) {
+  ['setup-screen','intro-screen','game-screen','eliminated-screen','result-screen'].forEach(s => {
+    const el = document.getElementById(s);
+    if (!el) return;
+    if (s === id) {
+      el.classList.add('active');
+      el.classList.remove('fade-out');
+    } else {
+      el.classList.remove('active');
+    }
+  });
+}
+
+function runIntro() {
+  const introScreen  = document.getElementById('intro-screen');
+  const countdownEl  = document.getElementById('intro-countdown');
+  const enterBtn     = document.getElementById('intro-enter-btn');
+  const playerNameEl = document.getElementById('intro-player-name');
+  const mentorNameEl = document.getElementById('intro-mentor-name');
+
+  if (!introScreen) return;
+
+  const mentor = getMentor();
+  if (playerNameEl) playerNameEl.textContent = playerName;
+  if (mentorNameEl && mentor) {
+    mentorNameEl.textContent = mentor.icon + '  ' + mentor.name + ' 導師帶隊';
+  }
+
+  showScreen('intro-screen');
+
+  let cIdx = 0;
+  const counts = [3, 2, 1];
+
+  setTimeout(() => {
+    function showCount() {
+      if (!countdownEl) return;
+      if (cIdx >= counts.length) {
+        countdownEl.innerHTML = '';
+        if (enterBtn) {
+          enterBtn.style.display = 'block';
+          enterBtn.addEventListener('click', enterGame, { once: true });
+        }
+        return;
+      }
+      countdownEl.innerHTML = '<span class="countdown-num">' + counts[cIdx] + '</span>';
+      cIdx++;
+      setTimeout(showCount, 900);
+    }
+    showCount();
+  }, 750);
+}
+
+function enterGame() {
+  const introScreen = document.getElementById('intro-screen');
+  if (!introScreen) return;
+
+  introScreen.classList.add('fade-out');
+  setTimeout(() => {
+    introScreen.classList.remove('active');
+    introScreen.classList.remove('fade-out');
+    showScreen('game-screen');
+    buildPips();
+    loadStage();
+  }, 520);
+}
+
+// ═══════════════════════════════════════
+//  初始化
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  const introEl = document.getElementById('intro-screen');
+  if (introEl) introEl.classList.remove('active');
+
+  currentSeed = generateSeed();
+  const seedInputEl = document.getElementById('seed-input');
+  if (seedInputEl) {
+    seedInputEl.value = currentSeed;
+    seedInputEl.addEventListener('input', () => {
+      const val = seedInputEl.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      seedInputEl.value = val;
+      if (val.length === 6) currentSeed = val;
+    });
+  }
+
+  const seedRollBtn = document.getElementById('seed-roll-btn');
+  if (seedRollBtn) {
+    seedRollBtn.addEventListener('click', () => {
+      currentSeed = generateSeed();
+      if (seedInputEl) seedInputEl.value = currentSeed;
+    });
+  }
+
+  document.querySelectorAll('.gender-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      playerGender = btn.dataset.gender;
+    });
+  });
+
+  document.querySelectorAll('.mentor-select-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.mentor-select-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedMentor = card.dataset.mentor;
+      checkEnterBtn();
+    });
+  });
+
+  const nameInput = document.getElementById('user-name');
+  const ageInput  = document.getElementById('user-age');
+  if (nameInput) nameInput.addEventListener('input', checkEnterBtn);
+  if (ageInput)  ageInput.addEventListener('input',  checkEnterBtn);
+
+  const enterBtn = document.getElementById('enter-btn');
+  if (enterBtn) enterBtn.addEventListener('click', startGame);
+
+  const nextBtn = document.getElementById('next-btn');
+  if (nextBtn) nextBtn.addEventListener('click', () => { stageIdx++; loadStage(); });
+
+  const reviveBtn = document.getElementById('revive-btn');
+  if (reviveBtn) reviveBtn.addEventListener('click', reviveNow);
+
+  const elimEndBtn = document.getElementById('elim-end-btn');
+  if (elimEndBtn) elimEndBtn.addEventListener('click', () => {
+    showScreen('result-screen');
+    renderResult();
+  });
+  const shareBtn = document.getElementById('share-card-btn');
+  if (shareBtn) {
+    shareBtn.addEventListener('click', generateShareCard);
+  }
+});
+
+function checkEnterBtn() {
+  const nameEl  = document.getElementById('user-name');
+  const ageEl   = document.getElementById('user-age');
+  const enterEl = document.getElementById('enter-btn');
+  if (!nameEl || !ageEl || !enterEl) return;
+  const ok = nameEl.value.trim() !== '' && ageEl.value.trim() !== '' && selectedMentor !== null;
+  enterEl.disabled = !ok;
+}
+
+// ═══════════════════════════════════════
+//  種子碼與排名工具
+// ═══════════════════════════════════════
+function generateSeed() {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let seed = '';
+  for (let i = 0; i < 6; i++) seed += chars[Math.floor(Math.random() * chars.length)];
+  return seed;
+}
+
+function pickVariant(seed) {
+  return VARIANTS[seedToNum(seed) % VARIANTS.length];
+}
+
+function pickQuestions(seed) {
+  const n        = seedToNum(seed);
+  const prePool  = QUESTION_POOL.filter(q => q.phase === '預賽');
+  const semiPool = QUESTION_POOL.filter(q => q.phase === '準決賽');
+  const finPool  = QUESTION_POOL.filter(q => q.phase === '決賽');
+
+  function seedShuffle(arr, offset) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = (n * (i + 1) + offset) % (i + 1);
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  const pre  = seedShuffle(prePool, 1).slice(0, 2);
+  const semi = seedShuffle(semiPool, 2).slice(0, 2);
+  const fin  = seedShuffle(finPool, 3).slice(0, 1);
+  return [...pre, ...semi, ...fin];
+}
+
+function pickSpecials(seed) {
+  const n    = seedToNum(seed);
+  const pool = [...SPECIAL_POOL];
+  
+  // 🎲 運用種子碼對事件池進行真正的洗牌
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = (n * (i + 7)) % (i + 1);
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  
+  // 洗完後直接取前 2 個
+  return pool.slice(0, 2);
+}
+
+function getDiffInfo(stage) {
+  if (!stage || stage.isEvent) return null;
+  return getTimerByDifficulty(stage.phase);
+}
+
+function getTimer(stage) {
+  if (!stage || stage.isEvent) return 0;
+  return getTimerByDifficulty(stage.phase).seconds;
+}
+
+function calcRanking() {
+ const statSum = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
+  const mentorPts = (mentorScore[selectedMentor] || 50) * 1.2;
+  const playerFinalScore = statSum + mentorPts;
+
+  return npcs.filter(n => n.total > playerFinalScore).length + 1;
+}
+
+function updateRankDisplayOnPanel() {
+  const rank  = calcRanking();
+  const total = npcs.length + 1;
+  const rankValEl = document.getElementById('rank-val');
+  const rankTrendEl = document.getElementById('rank-trend');
+  
+  if (rankValEl) {
+    rankValEl.innerHTML = '#' + rank + '<span class="sc-val-unit">/' + total + '</span>';
+  }
+  
+  if (rankTrendEl) {
+    if (rank === 1) {
+      rankTrendEl.textContent = '👑 目前領先群雄';
+      rankTrendEl.className = 'social-trend trend-up';
+    } else if (rank <= 3) {
+      rankTrendEl.textContent = '🔥 晉級安全區';
+      rankTrendEl.className = 'social-trend trend-up';
+    } else {
+      rankTrendEl.textContent = '⚠️ 處於淘汰邊緣';
+      rankTrendEl.className = 'social-trend trend-down';
+    }
+  }
+}
+
+// ═══════════════════════════════════════
+//  導師系統
+// ═══════════════════════════════════════
+function initMentorScore() {
+  mentorScore = {};
+  mentorScore[selectedMentor] = 60;
+}
+
+function getMentor() {
+  return MENTORS[selectedMentor] || null;
+}
+
+function calcMentorDelta(optType) {
+  const mentor = getMentor();
+  if (!mentor) return 0;
+  let delta = 0;
+  mentor.likes.forEach(k    => { if (stats[k] >= 60) delta += 3; });
+  mentor.dislikes.forEach(k => { if (stats[k] >= 70) delta -= 2; });
+  if (optType === mentor.optBonus)   delta += 5;
+  if (optType === mentor.optPenalty) delta -= 4;
+  delta += 3;
+  return delta;
+}
+
+function updateMentorScore(optType) {
+  const delta = calcMentorDelta(optType);
+  mentorScore[selectedMentor] = Math.max(0, Math.min(100, (mentorScore[selectedMentor] || 50) + delta));
+  renderMentorBar();
+}
+
+function renderMentorBar() {
+  const mentor = getMentor();
+  if (!mentor) return;
+  const score = mentorScore[selectedMentor] || 50;
+  const fill  = document.getElementById('single-mentor-fill');
+  const val   = document.getElementById('single-mentor-val');
+  const label = document.getElementById('single-mentor-label');
+  if (fill)  fill.style.width  = score + '%';
+  if (val)   val.textContent   = score;
+  if (label) label.textContent = mentor.icon + ' ' + mentor.name;
+}
+
+function getFinalMentorComment() {
+  const score = mentorScore[selectedMentor] || 50;
+  const id    = selectedMentor;
+  if (id === 'qianyeye') {
+    if      (score >= 75) return '數據引用頻率達標，術語誤用率控制在 3% 以內。這個成績，我給過。';
+    else if (score >= 50) return '數據底子勉強及格，但有幾處打擊率和防禦率混用，下次我不會假裝沒看見。';
+    else                  return '不合格。你的數據引用錯誤率超過容忍上限，回去把《棒球統計學》重新看一遍。';
+  }
+  if (id === 'dapangge') {
+    if      (score >= 75) return '史料掌握相當紮實，不過細節還有一兩處年份記錯，小地方要注意喔。';
+    else if (score >= 50) return '歷史數據引用大致正確，但深度不夠，只停留在表面數字，沒有挖掘背後故事脈絡。';
+    else                  return '嗯⋯⋯有幾個歷史對戰紀錄說錯了，我推了三次眼鏡。建議把近五年對戰資料重新整理一遍。';
+  }
+  if (id === 'ningning') {
+    if      (score >= 75) return '聽到你最後那段播報，我起雞皮疙瘩了。那個語速的拉伸和情緒的收放，就是我要的張力。';
+    else if (score >= 50) return '有幾個高潮時刻呼吸節奏掌握得不錯，但平淡局面還是太死板，要讓觀眾感覺你在說話，不是在唸稿。';
+    else                  return '播報語速太平了，高潮和低潮聽起來一個樣。棒球比賽是有生命的，你的聲音也要跟著呼吸。';
+  }
+  return '繼續努力。';
+}
+
+function getStyleAnalysis() {
+  const a = styleCounter.A, b = styleCounter.B, c = styleCounter.C;
+  if (a >= 4) return { icon:'🎙', title:'專業正統派', desc:'術語精準、節奏穩健，有職業主播的架勢。數據交代清晰，評審最欣賞這種紮實的底子。' };
+  if (b >= 3) return { icon:'🔥', title:'激情情緒派', desc:'感染力爆表，觀眾跟著你的情緒起伏。但情緒化播報容易失去中立性，高潮之後需要更快收回。' };
+  if (c >= 3) return { icon:'🎯', title:'娛樂預測派', desc:'觀眾喜歡你的娛樂感和話題性。預測型播報製造懸念，但專業底子仍需加強。' };
+  if (a >= 2 && b >= 2) return { icon:'⚡', title:'專業激情混血型', desc:'穩中帶爆發，能在關鍵時刻拉高情緒又不完全失控。這種平衡感很難得。' };
+  if (a >= 2 && c >= 2) return { icon:'🌟', title:'專業娛樂混血型', desc:'有深度也有話題性，專業分析和娛樂預測並存。這種風格最有潛力發展個人特色。' };
+  if (b >= 2 && c >= 2) return { icon:'📣', title:'熱血娛樂派', desc:'充滿能量和娛樂性，現場感十足。觀眾不會無聊，但需要在專業面多下功夫。' };
+  return { icon:'🏆', title:'全能均衡型', desc:'各方面表現平均，沒有明顯弱點。這是最難達到的播報狀態，代表你能適應各種局面。' };
+}
+
+function renderStyleAnalysis() {
+  const analysis = getStyleAnalysis();
+  const iconEl   = document.getElementById('style-icon');
+  const titleEl  = document.getElementById('style-title');
+  const descEl   = document.getElementById('style-desc');
+  const barRow   = document.getElementById('style-bar-row');
+
+  if (iconEl)  iconEl.textContent  = analysis.icon;
+  if (titleEl) titleEl.textContent = analysis.title;
+  if (descEl)  descEl.textContent  = analysis.desc;
+
+  if (barRow) {
+    barRow.innerHTML =
+      '<span class="style-bar-chip style-bar-a">專業 A × ' + styleCounter.A + '</span>' +
+      '<span class="style-bar-chip style-bar-b">情緒 B × ' + styleCounter.B + '</span>' +
+      '<span class="style-bar-chip style-bar-c">娛樂 C × ' + styleCounter.C + '</span>';
+  }
+}
+
+// ═══════════════════════════════════════
+//  開始遊戲與關卡循環
+// ═══════════════════════════════════════
+function startGame() {
+  playerName = document.getElementById('user-name').value.trim();
+  playerAge  = document.getElementById('user-age').value.trim();
+
+  const seedInput = document.getElementById('seed-input');
+  if (!seedInput || seedInput.value.length < 6) {
+    currentSeed = generateSeed();
+    if (seedInput) seedInput.value = currentSeed;
+  } else {
+    currentSeed = seedInput.value;
+  }
+
+  const baseVariant = pickVariant(currentSeed);
+  currentVariant = {
+    ...baseVariant,
+    displayName: playerName + ' — ' + baseVariant.name,
+    typeName:    baseVariant.name
+  };
+
+  const mentor    = getMentor();
+  const initStats = { ...currentVariant.stats };
+  if (mentor && mentor.initBonus) {
+    Object.keys(mentor.initBonus).forEach(k => {
+      if (initStats[k] !== undefined) {
+        initStats[k] = Math.max(10, Math.min(95, initStats[k] + mentor.initBonus[k]));
+      }
+    });
+  }
+  stats = initStats;
+
+  initMentorScore();
+  styleCounter = { A: 0, B: 0, C: 0 };
+  fans = 0; stageIdx = 0;
+  hasRevived = false; wasRevived = false;
+
+  npcs = generateNPCs(currentVariant, currentSeed);
+
+  const questions = pickQuestions(currentSeed);
+  const specials  = pickSpecials(currentSeed);
+
+  if (questions.length < 5 || specials.length < 2) {
+    alert('題目資料不足，請檢查 data.js 的題庫。');
+    return;
+  }
+
+  currentStages = [
+    questions[0],
+    questions[1],
+    { ...specials[0], isEvent: true },
+    questions[2],
+    questions[3],
+    { ...specials[1], isEvent: true },
+    questions[4]
+  ];
+
+  renderMentorBar();
+  runIntro();
+}
+
+function buildPips() {
+  const container = document.getElementById('stage-pips');
+  if (!container) return;
+  container.innerHTML = currentStages.map((s, i) =>
+    '<div class="stage-pip' + (s.isEvent ? ' event' : '') + '" id="pip-' + i + '"></div>'
+  ).join('');
+}
+
+function updatePips() {
+  currentStages.forEach((s, i) => {
+    const pip = document.getElementById('pip-' + i);
+    if (!pip) return;
+    const base = 'stage-pip' + (s.isEvent ? ' event' : '');
+    pip.className = base + (i < stageIdx ? ' done' : i === stageIdx ? ' active' : '');
+  });
+}
+
+function updateStats() {
+  STAT_KEYS.forEach(k => {
+    const v = Math.max(0, Math.min(100, stats[k]));
+    const bar = document.getElementById('b-' + k);
+    const val = document.getElementById('v-' + k);
+    if (bar) bar.style.width = v + '%';
+    if (val) val.textContent = v;
+  });
+}
+
+function updateSocial(dFans) {
+  fans = Math.max(0, fans + dFans);
+  const fanEl = document.getElementById('fans-val');
+  if (fanEl) fanEl.innerHTML = formatNum(fans) + '<span class="sc-val-unit">人</span>';
+  setTrend('fans-trend', dFans);
+  updateRankDisplayOnPanel();
+}
+
+function formatNum(n) {
+  return n >= 10000 ? (n / 10000).toFixed(1) + '萬' : n.toLocaleString();
+}
+
+function setTrend(id, d) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (d > 0) {
+    el.textContent = '▲ +' + Math.abs(d).toLocaleString();
+    el.className   = 'social-trend trend-up';
+  } else if (d < 0) {
+    el.textContent = '▼ ' + d.toLocaleString();
+    el.className   = 'social-trend trend-down';
+  } else {
+    el.textContent = '— 持平';
+    el.className   = 'social-trend trend-flat';
+  }
+}
+
+function loadStage() {
+  if (stageIdx >= currentStages.length) {
+    showScreen('result-screen');
+    renderResult();
+    return;
+  }
+
+  answered    = false;
+  pendingElim = false;
+  const stage = currentStages[stageIdx];
+
+  updatePips();
+  updateStats();
+  updateRankDisplayOnPanel();
+
+  const gameScreen  = document.getElementById('game-screen');
+  const finalBanner = document.getElementById('final-banner');
+  if (stage.phase === '決賽') {
+    if (gameScreen)  gameScreen.classList.add('is-final');
+    if (finalBanner) finalBanner.classList.add('show');
+  } else {
+    if (gameScreen)  gameScreen.classList.remove('is-final');
+    if (finalBanner) finalBanner.classList.remove('show');
+  }
+
+  const labelEl  = document.getElementById('q-label');
+  const diffInfo = getDiffInfo(stage);
+  if (labelEl) {
+    if (stage.isEvent) {
+      labelEl.textContent = '⚡ 特殊關卡 ' + stage.label;
+      labelEl.className   = 'question-label event-label';
+    } else {
+      const diffTag = diffInfo ? '<span class="difficulty-tag ' + diffInfo.cls + '">' + diffInfo.label + '</span>' : '';
+      labelEl.innerHTML = '[' + stage.phase + '] ' + stage.label + ' ' + diffTag;
+      labelEl.className = 'question-label';
+    }
+  }
+
+  const matchTag = document.getElementById('match-tag');
+  if (matchTag) {
+    matchTag.textContent   = stage.match || '';
+    matchTag.style.display = stage.match ? 'block' : 'none';
+  }
+
+  const qText = document.getElementById('q-text');
+  if (qText) qText.textContent = stage.q;
+
+  const imgBox = document.getElementById('stage-img-container');
+  const imgEl  = document.getElementById('stage-img');
+  if (imgBox && imgEl) {
+    if (stage.img) {
+      imgEl.src = stage.img;
+      imgBox.style.display = 'block';
+    } else {
+      imgBox.style.display = 'none';
+    }
+  }
+
+  const toast = document.getElementById('feedback-toast');
+  if (toast) { toast.className = 'feedback-toast'; toast.innerHTML = ''; }
+  const dp = document.getElementById('delta-panel');
+  if (dp) { dp.className = 'delta-panel'; dp.innerHTML = ''; }
+
+  const nextBtn = document.getElementById('next-btn');
+  if (nextBtn) nextBtn.className = 'btn-primary next-btn';
+
+  const row = document.querySelector('.timer-row');
+  if (row) row.style.display = stage.isEvent ? 'none' : 'flex';
+
+  const container = document.getElementById('options-container');
+  if (!container) return;
+  container.innerHTML = '';
+  stage.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt.text;
+    btn.addEventListener('click', () => chooseOption(i));
+    container.appendChild(btn);
+  });
+
+  startTimer(stage);
+}
+
+function startTimer(stage) {
+  if (timer) clearInterval(timer);
+  const seconds = getTimer(stage);
+  const fill    = document.getElementById('timer-fill');
+  const num     = document.getElementById('timer-num');
+  if (seconds === 0) return;
+
+  timeLeft = seconds;
+  if (fill) { fill.style.width = '100%'; fill.style.background = 'var(--green)'; }
+  if (num)  num.textContent = seconds;
+
+  timer = setInterval(() => {
+    timeLeft--;
+    if (fill) fill.style.width = (timeLeft / seconds * 100) + '%';
+    if (num)  num.textContent  = timeLeft;
+    if (fill) {
+      if      (timeLeft <= 5) fill.style.background = 'var(--red)';
+      else if (timeLeft <= seconds * 0.4) fill.style.background = 'var(--gold)';
+    }
+    if (timeLeft <= 0) { clearInterval(timer); timeoutChoice(); }
+  }, 1000);
+}
+
+function timeoutChoice() {
+  if (answered) return;
+  answered = true;
+  disableOptions();
+  applyEffect(
+    { speaking:-10, reflex:-10, data:-5, term:-5, tension:-10 },
+    { fans:-1200 }, 'timeout'
+  );
+  showFeedback('timeout');
+  finishTurn();
+}
+
+function chooseOption(idx) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timer);
+
+  const stage   = currentStages[stageIdx];
+  const opt     = stage.options[idx];
+  const seconds = getTimer(stage);
+  const diff    = getDiffInfo(stage);
+
+  if (opt.type && styleCounter[opt.type] !== undefined) {
+    styleCounter[opt.type]++;
+  }
+
+  let mult = 1.0;
+  if (opt.type === 'A' && seconds > 0 && diff) {
+    mult = diff.mult;
+    const ratio = timeLeft / seconds;
+    if      (ratio > 0.65) mult *= 1.2;
+    else if (ratio < 0.25) mult *= 0.9;
+  }
+
+  const btns = document.querySelectorAll('.option-btn');
+  if (btns[idx]) btns[idx].classList.add(
+    opt.type === 'A' ? 'correct-flash' :
+    opt.type === 'B' ? 'wrong-flash'   : 'neutral-flash'
+  );
+  disableOptions();
+
+  applyEffect(opt.effect, opt.social, opt.type, mult);
+
+  if (stage.roleBonus && stage.roleBonus[currentVariant.id]) {
+    const bonus = stage.roleBonus[currentVariant.id];
+    if (bonus.optType === opt.type) {
+      const bonusEff    = { ...bonus.bonus };
+      const socialBonus = {};
+      if (bonusEff.fans) { socialBonus.fans = bonusEff.fans; delete bonusEff.fans; }
+      delete bonusEff.ptt;
+      applyEffect(bonusEff, socialBonus, 'bonus');
+    }
+  }
+
+  updateMentorScore(opt.type);
+  npcs = fluctuateNPCs(npcs, currentSeed, stageIdx);
+  showFeedback(opt.type);
+  finishTurn();
+}
+
+function applyEffect(eff, social, optType, mult = 1) {
+  const before = {};
+  STAT_KEYS.forEach(k => before[k] = stats[k]);
+
+  STAT_KEYS.forEach(k => {
+    if (eff[k]) stats[k] = Math.round(stats[k] + eff[k] * mult);
+    stats[k] = Math.max(0, Math.min(100, stats[k]));
+  });
+
+  updateStats();
+  if (social) updateSocial(social.fans || 0);
+  if (optType === 'bonus') return;
+
+  const dp = document.getElementById('delta-panel');
+  if (!dp) return;
+  dp.innerHTML = '';
+  let any = false;
+  STAT_KEYS.forEach(k => {
+    const diff = stats[k] - before[k];
+    if (diff !== 0) {
+      any = true;
+      const chip = document.createElement('span');
+      chip.className = 'delta-chip ' + (diff > 0 ? 'delta-pos' : 'delta-neg');
+      chip.textContent = STAT_NAMES[k] + ' ' + (diff > 0 ? '+' : '') + diff;
+      dp.appendChild(chip);
+    }
+  });
+  if (any) dp.className = 'delta-panel show';
+
+  if (STAT_KEYS.some(k => stats[k] <= 0)) pendingElim = true;
+}
+
+function showFeedback(optType) {
+  const t = document.getElementById('feedback-toast');
+  if (!t) return;
+  if (optType === 'timeout') {
+    t.innerHTML = '<div class="judge-line">⏱ 時間到！反應不及格，觀眾開始出現議論。</div>';
+    t.className = 'feedback-toast show wrong';
+    return;
+  }
+  const judgeLines = getJudgeComment(optType).split('\n');
+  const judgeHTML  =
+    '<div class="feedback-section-label">── 評審評語 ──</div>' +
+    '<div class="judge-panel">' +
+    judgeLines.map(l => '<div class="judge-line">' + l + '</div>').join('') +
+    '</div>';
+
+  const mentor = getMentor();
+  const delta  = calcMentorDelta(optType);
+  const sign   = delta > 0 ? '+' : '';
+  const cls    = delta > 0 ? 'mentor-delta-up' : delta < 0 ? 'mentor-delta-down' : 'mentor-delta-flat';
+  const mentorHTML = mentor
+    ? '<div class="feedback-section-label">── 導師反應 ──</div>' +
+      '<div class="mentor-reaction-row"><span class="mentor-reaction-chip ' + cls + '">' +
+      mentor.icon + ' ' + mentor.name + ' ' + sign + delta + '</span></div>'
+    : '';
+
+  t.innerHTML = judgeHTML + mentorHTML;
+  t.className = 'feedback-toast show ' + (optType === 'A' ? 'correct' : optType === 'B' ? 'wrong' : 'neutral');
+}
+
+function disableOptions() {
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+}
+
+function finishTurn() {
+  if (pendingElim) {
+    setTimeout(goEliminated, 1400);
+  } else {
+    const nextBtn = document.getElementById('next-btn');
+    if (nextBtn) nextBtn.className = 'btn-primary next-btn show';
+  }
+}
+
+// ═══════════════════════════════════════
+//  淘汰、復活與結果頁
+// ═══════════════════════════════════════
+function goEliminated() {
+  if (timer) clearInterval(timer);
+  const gameScreen = document.getElementById('game-screen');
+  if (gameScreen) gameScreen.classList.remove('is-final');
+
+  const zeroed = STAT_KEYS.filter(k => stats[k] <= 0).map(k => STAT_NAMES[k]).join('、');
+  const sub = document.getElementById('elim-sub');
+  if (sub) sub.innerHTML = '你的<strong>' + zeroed + '</strong>已耗盡歸零，狀態徹底崩潰，被迫離開選秀舞台（種子碼：' + currentSeed + '）。';
+
+  const reviveBox = document.getElementById('revive-box');
+  if (reviveBox) reviveBox.style.display = hasRevived ? 'none' : 'block';
+
+  showScreen('eliminated-screen');
+}
+
+function reviveNow() {
+  if (typeof VIDEO_URL !== 'undefined' && VIDEO_URL) {
+    window.open(VIDEO_URL, '_blank');
+  } else {
+    console.warn('VIDEO_URL 尚未設定或未定義');
+  }
+  hasRevived = true;
+  wasRevived = true;
+  pendingElim = false;
+
+  const mentor = getMentor();
+  const initStats = { ...currentVariant.stats };
+  if (mentor && mentor.initBonus) {
+    Object.keys(mentor.initBonus).forEach(k => {
+      if (initStats[k] !== undefined) {
+        initStats[k] = Math.max(10, Math.min(95, initStats[k] + mentor.initBonus[k]));
+      }
+    });
+  }
+  stats = initStats;
+  initMentorScore();
+  updateStats();
+  renderMentorBar();
+  showScreen('game-screen');
+  loadStage();
+}
+
+function renderResult() {
+  if (timer) clearInterval(timer);
+
+  const gameScreen = document.getElementById('game-screen');
+  if (gameScreen) gameScreen.classList.remove('is-final');
+
+  const row = document.querySelector('.timer-row');
+  if (row) row.style.display = 'flex';
+
+  const total = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
+  const statValues = {};
+  STAT_KEYS.forEach(k => statValues[k] = stats[k]);
+  const ranking = calcRanking();
+  const topMentor = getMentor();
+
+  const state = { total, fans, wasRevived, statValues, ranking };
+  const ending = ENDINGS.find(e => e.condition(state));
+  if (!ending) return;
+
+  const titleEl = document.getElementById('r-title');
+  if (titleEl) {
+    titleEl.className = 'result-title' + (ending.titleClass ? ' ' + ending.titleClass : '');
+    titleEl.textContent = ending.title(playerName);
+  }
+
+  const rankEl = document.getElementById('r-rank');
+  if (rankEl) rankEl.textContent = ending.rank;
+
+  const subEl = document.getElementById('r-subtitle');
+  if (subEl) subEl.textContent = ending.subtitle(
+    playerName, currentSeed, '', topMentor
+  );
+
+  const fanEl = document.getElementById('r-fans');
+  if (fanEl) fanEl.textContent = formatNum(fans);
+  // 🏆 將最終排名顯示在輿論聲勢的格子裡
+  const finalRankEl = document.getElementById('r-final-rank');
+  if (finalRankEl) finalRankEl.textContent = '#' + ranking;
+
+  STAT_KEYS.forEach(k => {
+    const v = Math.max(0, Math.min(100, stats[k]));
+    const bar = document.getElementById('rb-' + k);
+    const val = document.getElementById('rv-' + k);
+    if (bar) bar.style.width = v + '%';
+    if (val) val.textContent = v;
+  });
+
+  renderStyleAnalysis();
+  renderFinalMentorSection(ranking);
+}
+
+function renderFinalMentorSection(ranking) {
+  const resultHero = document.getElementById('r-subtitle');
+  if (!resultHero) return;
+
+  const existRank = document.getElementById('final-rank-tag');
+  const existMentor = document.getElementById('final-mentor-section');
+  if (existRank) existRank.remove();
+  if (existMentor) existMentor.remove();
+
+  const rankTag = document.createElement('div');
+  rankTag.id = 'final-rank-tag';
+  rankTag.style.cssText = 'text-align:center; margin-top:14px;';
+  rankTag.innerHTML =
+    '<span style="font-size:13px; color:var(--text2);">最終排名 </span>' +
+    '<span style="font-size:22px; font-weight:700; color:var(--gold);">#' + ranking + ' / ' + (npcs.length + 1) + '</span>';
+
+  const mentor = getMentor();
+  const score = mentorScore[selectedMentor] || 50;
+  const comment = getFinalMentorComment();
+  const barCls = score >= 70 ? 'final-mentor-bar-high' : score >= 40 ? 'final-mentor-bar-mid' : 'final-mentor-bar-low';
+
+  const mentorSection = document.createElement('div');
+  mentorSection.id = 'final-mentor-section';
+  mentorSection.className = 'final-mentor-section';
+  mentorSection.innerHTML =
+    '<div class="section-title" style="margin-top:20px;">導師最終評語</div>' +
+    '<div class="final-mentor-card chosen-mentor">' +
+    '<div class="final-mentor-header">' +
+    '<span class="final-mentor-name">' + mentor.icon + ' ' + mentor.name + '</span>' +
+    '<span class="final-mentor-score ' + barCls + '">' + score + ' 分</span>' +
+    '</div>' +
+    '<div class="final-mentor-comment">' + comment + '</div>' +
+    '</div>';
+
+  resultHero.parentNode.insertBefore(rankTag, resultHero.nextSibling);
+  resultHero.parentNode.insertBefore(mentorSection, rankTag.nextSibling);
+}
+// 📸 生成高質感戰績卡 (Canvas) 與 IG 限時動態引導
+function generateShareCard() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080;  // 採用 IG 限時動態標準黃金比例 9:16 (1080x1920)
+  canvas.height = 1920;
+  const ctx = canvas.getContext('2d');
+
+  const bgImg = new Image();
+  bgImg.src = '"C:\\新增資料夾\\題目測試\\assets\\r1.png"'; // 👈 你未來可以在這裡放一張精美的底圖
+  
+  bgImg.onload = () => {
+    // 如果有底圖，畫出底圖
+    ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+    drawCardContent(ctx, canvas);
+  };
+
+  bgImg.onerror = () => {
+    // 如果沒有放底圖，自動退回精緻的黑金漸層背景
+    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, '#090b10');
+    grad.addColorStop(0.5, '#181408');
+    grad.addColorStop(1, '#050505');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    drawCardContent(ctx, canvas);
+  };
+}
+
+function drawCardContent(ctx, canvas) {
+  // 裝飾性金銀邊框
+  ctx.strokeStyle = '#f5c842';
+  ctx.lineWidth = 12;
+  ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
+
+  // 頂部 LOGO 標題
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = 'bold 28px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('DAZN ORIGINAL × THE ANNOUNCER', canvas.width / 2, 160);
+
+  ctx.fillStyle = '#f5c842';
+  ctx.font = '900 64px sans-serif';
+  ctx.fillText('主播選秀戰績結算卡', canvas.width / 2, 250);
+
+  // 玩家資訊卡面
+  ctx.fillStyle = 'rgba(24, 28, 36, 0.85)';
+  ctx.fillRect(100, 320, canvas.width - 200, 220);
+  ctx.strokeStyle = '#3f485f';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(100, 320, canvas.width - 200, 220);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 40px sans-serif';
+  ctx.fillText('選手：' + playerName + ' (' + playerAge + '歲)', canvas.width / 2, 410);
+
+  const rank = calcRanking();
+  ctx.fillStyle = '#f5c842';
+  ctx.font = '900 72px sans-serif';
+  ctx.fillText('最終排名：#' + rank + ' / ' + (npcs.length + 1), canvas.width / 2, 490);
+
+  // 五角戰力統計面板
+  ctx.fillStyle = 'rgba(24, 28, 36, 0.85)';
+  ctx.fillRect(100, 600, canvas.width - 200, 680);
+  ctx.strokeStyle = '#3f485f';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(100, 600, canvas.width - 200, 680);
+
+  ctx.fillStyle = '#f5c842';
+  ctx.font = 'bold 36px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('【五角戰力總結】', 160, 680);
+
+  let startY = 770;
+  STAT_KEYS.forEach((k, idx) => {
+    const val = stats[k] || 0;
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'bold 28px sans-serif';
+    ctx.fillText(STAT_NAMES[k], 160, startY + (idx * 110));
+
+    // 戰力條背景
+    ctx.fillStyle = '#2e3646';
+    ctx.fillRect(320, startY - 22 + (idx * 110), 500, 24);
+
+    // 戰力條填滿
+    ctx.fillStyle = '#3ecf7a';
+    ctx.fillRect(320, startY - 22 + (idx * 110), (500 * (val / 100)), 24);
+
+    // 數值
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 32px sans-serif';
+    ctx.fillText(val, 850, startY + (idx * 110));
+  });
+
+  // 底部宣傳標語
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '24px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('種子碼: ' + currentSeed + ' | 挑戰你的播報極限', canvas.width / 2, 1720);
+
+  // 觸發下載
+  const link = document.createElement('a');
+  link.download = playerName + '_主播戰績卡.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+
+  // 💡 導引玩家發布 IG 限時動態
+  setTimeout(() => {
+    alert('📸 戰績卡已成功下載！\n\n現在您可以打開 Instagram，將這張戰績卡發布到【限時動態】並標記我們囉！🔥');
+  }, 500);
+}
