@@ -125,53 +125,55 @@
     <div class="final-banner-title">⚡ FINAL ⚡</div>
   </div>
 
-  <!-- 📱 手機極簡頂部列：排名與導師摘要並排，不佔空間 -->
-  <div class="mobile-top-bar">
-    <div class="mtb-item">
-      <span>🏆 排名:</span> <strong id="rank-val-mini">#1/10</strong>
+  <!-- 🌟 參考圖風格：頂部可展開的球員狀態選單 -->
+  <div class="dropdown-status-card" id="status-dropdown-btn">
+    <div class="dsc-header">
+      <div class="dsc-title-area">
+        <span class="dsc-subtitle" id="panel-title">選手狀態</span>
+        <span class="dsc-main-title" id="dsc-player-summary">綜合戰力：250 | 排名 #1</span>
+      </div>
+      <div class="dsc-arrow">▼</div>
     </div>
-    <div class="mtb-item">
-      <span id="mentor-mini-label">🎙 導師: 60分</span>
+    
+    <!-- 展開後的五角戰力內容 -->
+    <div class="dsc-content" id="dsc-content">
+      <div class="stats-panel" style="margin-bottom:0; border:none; background:transparent;">
+        <div class="stat-row">
+          <div class="stat-name">口條</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-speaking" id="b-speaking" style="width:50%"></div></div>
+          <div class="stat-val" id="v-speaking">50</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-name">臨場</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-reflex" id="b-reflex" style="width:50%"></div></div>
+          <div class="stat-val" id="v-reflex">50</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-name">數據</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-data" id="b-data" style="width:50%"></div></div>
+          <div class="stat-val" id="v-data">50</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-name">術語</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-term" id="b-term" style="width:50%"></div></div>
+          <div class="stat-val" id="v-term">50</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-name">抗壓</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-tension" id="b-tension" style="width:50%"></div></div>
+          <div class="stat-val" id="v-tension">50</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 原本的戰力面板（我們改在手機上預設收納或精簡顯示） -->
-  <div class="stats-panel compact-stats">
-    <div class="stats-label" id="panel-title">選手戰力</div>
-    <div class="stat-row">
-      <div class="stat-name">口條</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-speaking" id="b-speaking" style="width:50%"></div></div>
-      <div class="stat-val" id="v-speaking">50</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">臨場</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-reflex" id="b-reflex" style="width:50%"></div></div>
-      <div class="stat-val" id="v-reflex">50</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">數據</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-data" id="b-data" style="width:50%"></div></div>
-      <div class="stat-val" id="v-data">50</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">術語</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-term" id="b-term" style="width:50%"></div></div>
-      <div class="stat-val" id="v-term">50</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">抗壓</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-tension" id="b-tension" style="width:50%"></div></div>
-      <div class="stat-val" id="v-tension">50</div>
-    </div>
-  </div>
-
-  <!-- 隱藏原本的大導師條與社群面板（我們將核心資訊精簡） -->
+  <!-- 隱藏原本佔空間的面板 -->
   <div style="display:none;">
     <div class="single-mentor-panel" id="old-mentor-panel"></div>
     <div class="social-panel" id="old-social-panel"></div>
   </div>
 
-  <!-- 計時器 -->
+  <!-- 簡化計時器 -->
   <div class="timer-row">
     <div class="timer-bar-bg">
       <div class="timer-bar-fill" id="timer-fill" style="width:100%"></div>
@@ -179,15 +181,24 @@
     <div class="timer-num" id="timer-num" aria-live="polite">15</div>
   </div>
 
-  <div id="match-tag"></div>
-  <div class="question-label" id="q-label">—</div>
-  <div class="stage-image-container" id="stage-img-container" style="display:none;">
-    <img id="stage-img" src="" alt="即時轉播畫面">
-    <div class="live-badge-overlay">🔴 LIVE</div>
-  </div>
-  
+  <!-- 🌟 參考圖風格：中央主事件大卡片 -->
+  <div class="event-card-container">
+    <div class="ec-category" id="q-label">—</div>
+    
+    <!-- 轉播圖片（如果有才顯示） -->
+    <div class="stage-image-container" id="stage-img-container" style="display:none;">
+      <img id="stage-img" src="" alt="即時轉播畫面">
+      <div class="live-badge-overlay">🔴 LIVE</div>
+    </div>
 
-  <div class="question-text"  id="q-text">載入中…</div>
+    <!-- 內文對話框 / 題目 -->
+    <div class="ec-content-box">
+      <div id="match-tag" style="color: var(--gold); font-weight: 700; margin-bottom: 6px;"></div>
+      <div class="question-text" id="q-text">載入中…</div>
+    </div>
+  </div>
+
+  <!-- 選項按鈕區 -->
   <div id="options-container"></div>
   <div class="feedback-toast" id="feedback-toast"></div>
   <div class="delta-panel"    id="delta-panel"></div>

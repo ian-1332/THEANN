@@ -167,6 +167,24 @@ function checkEnterBtn() {
   const ok = nameEl.value.trim() !== '' && ageEl.value.trim() !== '' && selectedMentor !== null;
   enterEl.disabled = !ok;
 }
+// 🌟 讓頂部狀態卡片可以點擊展開/收合
+document.addEventListener('DOMContentLoaded', () => {
+  const statusCard = document.getElementById('status-dropdown-btn');
+  if (statusCard) {
+    statusCard.addEventListener('click', () => {
+      statusCard.classList.toggle('open');
+    });
+  }
+});
+
+// 🌟 同步更新頂部摘要文字（例如總分與排名）
+function updateDscSummary() {
+  const summaryEl = document.getElementById('dsc-player-summary');
+  if (!summaryEl) return;
+  const total = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
+  const rank = calcRanking();
+  summaryEl.textContent = '綜合戰力：' + total + ' | 目前排名 #' + rank;
+}
 
 // ═══════════════════════════════════════
 //  種子碼與排名工具
@@ -491,6 +509,7 @@ function loadStage() {
   updatePips();
   updateStats();
   updateRankDisplayOnPanel();
+  updateDscSummary(); 
 
   const gameScreen  = document.getElementById('game-screen');
   const finalBanner = document.getElementById('final-banner');
