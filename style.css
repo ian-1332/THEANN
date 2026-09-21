@@ -753,30 +753,32 @@ input, textarea {
   display: none; /* 預設電腦版隱藏 */
 }
 @media (max-width: 480px) {
-  /* 1. 讓答題畫面與評語極度緊湊，保證在手機一屏內，完全不需要下滑 */
-  .stats-panel.compact-stats {
-    padding: 4px 8px;
-    margin-bottom: 4px;
-  }
-  .stats-panel.compact-stats .stat-row {
-    margin-bottom: 2px;
+  /* 稍微縮減手機版答題時的上下留白與戰力條高度 */
+  body {
+    padding: 12px 10px 30px;
   }
   
+  .stats-panel {
+    padding: 10px 12px;
+    margin-bottom: 10px;
+  }
+
   .stage-image-container {
-    max-height: 140px; /* 把圖片高度稍微調小，騰出空間給評語 */
-    margin-bottom: 6px;
+    max-height: 160px; /* 限制圖片高度，確保選項不超出螢幕 */
   }
 
   .question-text {
-    font-size: 12px;
-    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 14px;
   }
 
   .option-btn {
-    padding: 8px 10px;
-    font-size: 12px;
-    margin-bottom: 4px;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-bottom: 8px;
   }
+}
 
   /* 2. 讓評語區塊緊湊顯示，不超出畫面 */
   .feedback-toast {
@@ -794,4 +796,3 @@ input, textarea {
     grid-template-columns: 1fr 1fr !important; /* 兩欄並排 */
     gap: 8px;
   }
-}
