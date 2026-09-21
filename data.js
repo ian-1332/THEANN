@@ -272,7 +272,7 @@ const VARIANTS = [
 ];// ═══ 主關卡題庫（刪題後 34 題）═══
 const QUESTION_POOL = [
 // ── 預賽 ──
-{id:'q_pre1', phase:'預賽', match:'統一獅 vs 富邦悍將',
+{id:'q_pre1', phase:'預賽',
  label:'3局上・陳鏞基中外野安打突破僵局',
  img:'assets/q1.png',
  q:'請看圖說故事，你如何播報這記得分？',
@@ -283,19 +283,19 @@ const QUESTION_POOL = [
   {text:'「成功突破僵局！陳鏞基今晚狀態火燙，期待他的表現！」',type:'C',effect:{speaking:10,reflex:-5,data:-14,term:-12,tension:23},social:{ptt:180,fans:1000}}
 ]},
 
-{id:'q_pre2', phase:'預賽', match:'統一獅 vs 富邦悍將',
- label:'得點圈有人局面，擊出雙殺打中斷攻勢',
- img:'./assets/q2.jpg',
+{id:'q_pre2', phase:'預賽', 
+ label:'關鍵局面，成功擊出安打帶走比賽',
+ img:'./assets/q2.png',
  q:'請看圖說故事，你如何播報這記得分？',
  roleBonus:{'v1':{optType:'C',bonus:{fans:2500,speaking:8}},'v7':{optType:'A',bonus:{term:8,speaking:5}}},
  options:[
-  {text:'「右外野安打穿越！帶有兩分打點！三壘跑者李丞齡、二壘跑者陳聖平接連回來！統一獅 4 比 0 大幅領先！」',type:'A',effect:{speaking:-3,reflex:5,data:8,term:12,tension:8},social:{ptt:80,fans:1500}},
-  {text:'「完全擋不住四爺！這顆肉包球根本白白送分！」',type:'B',effect:{speaking:15,reflex:8,data:-12,term:-10,tension:-18},social:{ptt:250,fans:-2500}},
-  {text:'「看吧神準命中！這就是台灣隊長的巨星價值！下一棒繼續轟！」',type:'C',effect:{speaking:10,reflex:-5,data:-14,term:-12,tension:12},social:{ptt:180,fans:1000}}
+  {text:'「右外野安打穿越！這是一支再見安打！」',type:'A',effect:{speaking:-3,reflex:5,data:8,term:12,tension:8},social:{ptt:80,fans:1500}},
+  {text:'「完全擋不住！氣勢上就輸了，打者也設定好球路，非常有自信的擊出。」',type:'B',effect:{speaking:15,reflex:8,data:-12,term:-10,tension:-18},social:{ptt:250,fans:-2500}},
+  {text:'「看吧神準命中！這就是球星價值」',type:'C',effect:{speaking:10,reflex:-5,data:-14,term:-12,tension:12},social:{ptt:180,fans:1000}}
 ]},
 
 // ── 準決賽 ──
-{id:'q_semi1', phase:'準決賽', match:'統一獅 vs 富邦悍將',
+{id:'q_semi1', phase:'準決賽', 
  label:'七局上，喜歡的球隊逆轉勝，你會怎麼播報',
  q:'支持的球隊從開賽就被先發投手壓制，在最後一局安打串聯，一吐悶氣成功逆轉比賽，你會怎麼播報？',
  roleBonus:{'v6':{optType:'C',bonus:{fans:3000,speaking:10}},'v9':{optType:'A',bonus:{speaking:8,term:8}}},
@@ -305,7 +305,7 @@ const QUESTION_POOL = [
   {text:'「我就說他今晚手感燙！完全照著我的腳本走，氣勢都被拉過去了！」',type:'C',effect:{speaking:5,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:150}}
 ]},
 
-{id:'q_semi2', phase:'準決賽', match:'Rakuten Monkeys vs 富邦悍將',
+{id:'q_semi2', phase:'準決賽',
  label:'8局下・申皓瑋安打終結零封夢',
  q:'8局下富邦悍將終於反擊，第7棒大寶寶擊出右外野安打帶有 1 分打點，三壘跑者隊長跑回本壘，城堡隊追成 1:2！比賽還沒結束，你如何掌控「氣氛由鬆轉緊」的微妙節點？',
  roleBonus:{'v18':{optType:'A',bonus:{tension:8,reflex:5}},'v32':{optType:'C',bonus:{fans:2500,speaking:8}}},
@@ -316,7 +316,7 @@ const QUESTION_POOL = [
 ]},
 
 // ── 決賽（種子碼隨機抽 1 題）──
-{id:'q_fin1', phase:'決賽', match:'Rakuten Monkeys vs 富邦悍將',
+{id:'q_fin1', phase:'決賽', 
  label:'10局下・李勛傑再見安打',
  q:'10局下，兩出局三壘有人，李勛傑面對高壓第一球就積極出棒——擊出再見安打！富邦五比四收下勝利！這是今晚最後一棒，你的播報是？',
  roleBonus:{'v30':{optType:'A',bonus:{speaking:10,term:5}},'v7':{optType:'A',bonus:{speaking:8,term:8}}},
@@ -326,7 +326,7 @@ const QUESTION_POOL = [
   {text:'「神預言完美收尾！再見安打劇本就是我寫的！完全命中！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:2000}}
 ]},
 
-{id:'q_fin2', phase:'決賽', match:'Rakuten Monkeys vs 富邦悍將',
+{id:'q_fin2', phase:'決賽', 
  label:'8局下・梁家榮中外野安打追平',
  q:'8局下，梁家榮抓低球推往中線，成熟打者關鍵一擊追平比分！四比四，比賽回到原點！你如何播報這個讓全場沸騰的追平時刻？',
  roleBonus:{'v9':{optType:'A',bonus:{speaking:8,term:8}},'v36':{optType:'C',bonus:{fans:3000,speaking:10}}},
@@ -336,7 +336,7 @@ const QUESTION_POOL = [
   {text:'「完全命中！我就說阿銀這棒必定追平！接下來等我預測再見砲！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:2000}}
 ]},
 
-{id:'q_fin3', phase:'決賽', match:'統一獅 vs 富邦悍將',
+{id:'q_fin3', phase:'決賽', 
  label:'逆轉・朱迦恩右外野安打得2分',
  q:'兩好兩壞滿球數，朱迦恩果斷出棒，擊出右外野安打帶兩分打點，統一獅完成大逆轉！這是今晚最戲劇性的一棒，你如何收尾？',
  roleBonus:{'v32':{optType:'C',bonus:{fans:3500,speaking:10}},'v25':{optType:'A',bonus:{speaking:8,term:8}}},

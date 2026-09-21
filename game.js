@@ -240,6 +240,13 @@ function updateRankDisplayOnPanel() {
   const total = npcs.length + 1;
   const rankValEl = document.getElementById('rank-val');
   const rankTrendEl = document.getElementById('rank-trend');
+  // 📱 同步更新手機版極簡頂部列的排名
+  const rankMiniEl = document.getElementById('rank-val-mini');
+  if (rankMiniEl) rankMiniEl.textContent = '#' + rank + '/' + total;
+
+  if (rankValEl) {
+    rankValEl.innerHTML = '#' + rank + '<span class="sc-val-unit">/' + total + '</span>';
+  }
   
   if (rankValEl) {
     rankValEl.innerHTML = '#' + rank + '<span class="sc-val-unit">/' + total + '</span>';
@@ -299,6 +306,8 @@ function renderMentorBar() {
   if (fill)  fill.style.width  = score + '%';
   if (val)   val.textContent   = score;
   if (label) label.textContent = mentor.icon + ' ' + mentor.name;
+  const mentorMiniEl = document.getElementById('mentor-mini-label');
+  if (mentorMiniEl) mentorMiniEl.textContent = mentor.icon + ' ' + mentor.name + ': ' + score + '分';
 }
 
 function getFinalMentorComment() {

@@ -746,3 +746,52 @@ input, textarea {
     grid-template-columns: 1fr; 
   }
 }
+/* ══════════════════════════════════
+   手機版一屏到底（No-Scroll）介面優化
+══════════════════════════════════ */
+.mobile-top-bar {
+  display: none; /* 預設電腦版隱藏 */
+}
+@media (max-width: 480px) {
+  /* 1. 讓答題畫面與評語極度緊湊，保證在手機一屏內，完全不需要下滑 */
+  .stats-panel.compact-stats {
+    padding: 4px 8px;
+    margin-bottom: 4px;
+  }
+  .stats-panel.compact-stats .stat-row {
+    margin-bottom: 2px;
+  }
+  
+  .stage-image-container {
+    max-height: 140px; /* 把圖片高度稍微調小，騰出空間給評語 */
+    margin-bottom: 6px;
+  }
+
+  .question-text {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .option-btn {
+    padding: 8px 10px;
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  /* 2. 讓評語區塊緊湊顯示，不超出畫面 */
+  .feedback-toast {
+    padding: 8px 10px;
+    font-size: 11px;
+    margin-top: 6px;
+  }
+  .judge-line {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+
+  /* 3. 【Result 頁面】取消三欄，改為兩欄並排（排名 + 產生戰績卡按鈕） */
+  .result-social-row {
+    grid-template-columns: 1fr 1fr !important; /* 兩欄並排 */
+    gap: 8px;
+  }
+}

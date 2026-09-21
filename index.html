@@ -125,7 +125,18 @@
     <div class="final-banner-title">⚡ FINAL ⚡</div>
   </div>
 
-  <div class="stats-panel">
+  <!-- 📱 手機極簡頂部列：排名與導師摘要並排，不佔空間 -->
+  <div class="mobile-top-bar">
+    <div class="mtb-item">
+      <span>🏆 排名:</span> <strong id="rank-val-mini">#1/10</strong>
+    </div>
+    <div class="mtb-item">
+      <span id="mentor-mini-label">🎙 導師: 60分</span>
+    </div>
+  </div>
+
+  <!-- 原本的戰力面板（我們改在手機上預設收納或精簡顯示） -->
+  <div class="stats-panel compact-stats">
     <div class="stats-label" id="panel-title">選手戰力</div>
     <div class="stat-row">
       <div class="stat-name">口條</div>
@@ -154,27 +165,13 @@
     </div>
   </div>
 
-  <div class="single-mentor-panel">
-    <div class="single-mentor-label" id="single-mentor-label">🎙 導師</div>
-    <div class="single-mentor-bar-bg">
-      <div class="single-mentor-bar-fill" id="single-mentor-fill" style="width:60%"></div>
-    </div>
-    <div class="single-mentor-val" id="single-mentor-val">60</div>
+  <!-- 隱藏原本的大導師條與社群面板（我們將核心資訊精簡） -->
+  <div style="display:none;">
+    <div class="single-mentor-panel" id="old-mentor-panel"></div>
+    <div class="social-panel" id="old-social-panel"></div>
   </div>
 
-  <div class="social-panel">
-    <div class="social-card sc-rank">
-      <div class="sc-label"><span>🏆</span>目前排名</div>
-      <div class="sc-val" id="rank-val">#1<span class="sc-val-unit">/10</span></div>
-      <div class="social-trend" id="rank-trend">爭奪冠軍中</div>
-    </div>
-    <div class="social-card sc-fans">
-      <div class="sc-label"><span>✨</span>網路人氣</div>
-      <div class="sc-val" id="fans-val">0<span class="sc-val-unit">人</span></div>
-      <div class="social-trend" id="fans-trend">—</div>
-    </div>
-  </div>
-
+  <!-- 計時器 -->
   <div class="timer-row">
     <div class="timer-bar-bg">
       <div class="timer-bar-fill" id="timer-fill" style="width:100%"></div>
@@ -185,7 +182,7 @@
   <div id="match-tag"></div>
   <div class="question-label" id="q-label">—</div>
 
-  <!-- 看圖說故事轉播畫面容器 -->
+  <!-- 轉播畫面（手機上適度縮減最大高度，確保選項露出來） -->
   <div class="stage-image-container" id="stage-img-container" style="display:none;">
     <img id="stage-img" src="" alt="即時轉播畫面">
     <div class="live-badge-overlay">🔴 LIVE</div>
@@ -226,7 +223,7 @@
   <!-- 1. 精彩賽事回顧影片 -->
   <div class="section-title">精彩賽事回顧</div>
   <div class="video-embed-container">
-    <iframe src="https://www.youtube.com/embed/x1pfxmRhmc0" 
+    <iframe src="https://www.youtube.com/embed/bZLFv0c3R0I" 
             title="THE ANNOUNCER 賽事精華" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
             allowfullscreen>
@@ -242,14 +239,6 @@
       <div class="rs-val" id="r-final-rank" style="color:var(--gold);">#1</div>
       <div class="rs-label">最終選秀排名</div>
     </div>
-    
-    <!-- 網路粉絲人氣卡片 -->
-    <div class="result-soc-card">
-      <div class="rs-icon">✨</div>
-      <div class="rs-val rs-fans" id="r-fans">0</div>
-      <div class="rs-label">網路粉絲人氣</div>
-    </div>
-
     <!-- 產生戰績卡按鈕卡片 -->
     <button type="button" class="result-soc-card share-card-card" id="share-card-btn">
       <div class="rs-icon">📸</div>
@@ -303,7 +292,7 @@
 
   <!-- 5. 底部 CTA 按鈕區 -->
   <div class="cta-label">想看真正的主播是怎麼播報這場比賽的？</div>
-  <a href="https://www.youtube.com/watch?v=x1pfxmRhmc0"
+  <a href="https://www.youtube.com/watch?v=bZLFv0c3R0I"
      target="_blank" class="btn-cta-primary">
     🎬 觀看完整節目預告
   </a>
