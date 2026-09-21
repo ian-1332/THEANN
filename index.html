@@ -222,92 +222,60 @@
 </div>
 <!-- ───── RESULT ───── -->
 <div id="result-screen" class="screen">
-  <div class="result-hero">
-    <div class="result-rank" id="r-rank">🏆</div>
-    <div class="result-title" id="r-title">挑戰結果</div>
-    <div class="result-subtitle" id="r-subtitle"></div>
+  <div class="result-hero" style="text-align: center; padding: 24px 0 16px;">
+    <div class="result-rank" id="r-rank" style="font-size: 64px; margin-bottom: 8px;">🏆</div>
+    <div class="result-title" id="r-title" style="font-size: 28px; font-weight: 800; color: var(--text); margin-bottom: 6px;">挑戰結果</div>
+    <div class="result-subtitle" id="r-subtitle" style="font-size: 20px; color: var(--gold); font-weight: 700;"></div>
   </div>
 
-  <div class="divider"></div>
+  <!-- 導師評語預留位置 -->
+  <div id="final-mentor-section" class="final-mentor-section"></div>
 
-  <!-- 1. 精彩賽事回顧影片 -->
-  <div class="section-title">精彩賽事回顧</div>
-  <div class="video-embed-container">
-    <iframe src="https://www.youtube.com/embed/bZLFv0c3R0I" 
+  <!-- 🥇 英雄區核心 CTA：全頁面最強按鈕（金色戰績卡生成） -->
+  <div class="result-cta-section" style="text-align: center;">
+    <button type="button" class="btn-cta-primary" id="share-card-btn">
+      📸 產生戰績卡（一鍵下載分享）
+    </button>
+  </div>
+<div class="section-title" style="margin-top: 20px;">精彩賽事回顧</div>
+  <div class="video-embed-container" style="margin-bottom: 20px;">
+    <iframe src="https://www.youtube.com/embed/SCN4GnAI7zc" 
             title="THE ANNOUNCER 賽事精華" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
             allowfullscreen>
     </iframe>
   </div>
-
-  <!-- 2. 最終輿論聲勢（含三欄並排的戰績卡生成按鈕） -->
-  <div class="section-title">最終輿論聲勢</div>
-  <div class="result-social-row">
-    <!-- 最終選秀排名卡片 -->
-    <div class="result-soc-card">
-      <div class="rs-icon">🏆</div>
-      <div class="rs-val" id="r-final-rank" style="color:var(--gold);">#1</div>
-      <div class="rs-label">最終選秀排名</div>
-    </div>
-    <!-- 產生戰績卡按鈕卡片 -->
-    <button type="button" class="result-soc-card share-card-card" id="share-card-btn">
-      <div class="rs-icon">📸</div>
-      <div class="rs-val" style="color: var(--purple); font-size: 18px;">產生戰績卡</div>
-      <div class="rs-label">一鍵下載分享</div>
-    </button>
-  </div>
-
   <div class="divider"></div>
 
-  <!-- 3. 五角戰力總結 -->
-  <div class="section-title">五角戰力總結</div>
-  <div class="stats-panel" style="margin-bottom:20px;">
-    <div class="stat-row">
-      <div class="stat-name">口條</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-speaking" id="rb-speaking" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-speaking">0</div>
+  <!-- 📊 摺疊區 1：五角戰力詳解（預設收合，不佔首屏空間） -->
+  <details class="stats-accordion">
+    <summary>📊 五角戰力詳解與分析</summary>
+    <div class="stats-panel" style="margin-top: 10px;">
+      <div class="stat-row"><div class="stat-name">口條</div><div class="stat-bar-bg"><div class="stat-bar-fill bar-speaking" id="rb-speaking" style="width:0%"></div></div><div class="stat-val" id="rv-speaking">0</div></div>
+      <div class="stat-row"><div class="stat-name">臨場</div><div class="stat-bar-bg"><div class="stat-bar-fill bar-reflex" id="rb-reflex" style="width:0%"></div></div><div class="stat-val" id="rv-reflex">0</div></div>
+      <div class="stat-row"><div class="stat-name">數據</div><div class="stat-bar-bg"><div class="stat-bar-fill bar-data" id="rb-data" style="width:0%"></div></div><div class="stat-val" id="rv-data">0</div></div>
+      <div class="stat-row"><div class="stat-name">術語</div><div class="stat-bar-bg"><div class="stat-bar-fill bar-term" id="rb-term" style="width:0%"></div></div><div class="stat-val" id="rv-term">0</div></div>
+      <div class="stat-row"><div class="stat-name">抗壓</div><div class="stat-bar-bg"><div class="stat-bar-fill bar-tension" id="rb-tension" style="width:0%"></div></div><div class="stat-val" id="rv-tension">0</div></div>
     </div>
-    <div class="stat-row">
-      <div class="stat-name">臨場</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-reflex" id="rb-reflex" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-reflex">0</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">數據</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-data" id="rb-data" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-data">0</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">術語</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-term" id="rb-term" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-term">0</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">抗壓</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-tension" id="rb-tension" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-tension">0</div>
-    </div>
-  </div>
+  </details>
 
-  <!-- 4. 播報風格分析 -->
-  <div class="section-title">播報風格分析</div>
-  <div class="style-analysis-card" id="style-analysis-card">
-    <div class="style-icon" id="style-icon">🎙</div>
-    <div class="style-title" id="style-title">—</div>
-    <div class="style-desc"  id="style-desc">—</div>
-    <div class="style-bar-row" id="style-bar-row"></div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- 5. 底部 CTA 按鈕區 -->
+  <!-- 🎙 摺疊區 2：播報風格分析 -->
+  <details class="style-accordion">
+    <summary>🎙 播報風格深度解析</summary>
+    <div class="style-analysis-card" id="style-analysis-card" style="margin-top: 10px;">
+      <div class="style-icon" id="style-icon">🎙</div>
+      <div class="style-title" id="style-title">—</div>
+      <div class="style-desc"  id="style-desc">—</div>
+      <div class="style-bar-row" id="style-bar-row"></div>
+    </div>
+  </details>
   <div class="cta-label">想看真正的主播是怎麼播報這場比賽的？</div>
-  <a href="https://www.youtube.com/watch?v=bZLFv0c3R0I"
-     target="_blank" class="btn-cta-primary">
+  <a href="https://www.youtube.com/watch?v=x1pfxmRhmc0"
+     target="_blank" class="btn-cta-secondary" style="margin-bottom: 8px;">
     🎬 觀看完整節目預告
   </a>
   <a href="https://www.dazn.com/zh-TW/welcome"
-     target="_blank" class="btn-cta-secondary">
+     target="_blank" class="btn-cta-secondary" style="margin-bottom: 14px;">
     📺 註冊看完整賽事
   </a>
   <button type="button" class="btn-tertiary" onclick="location.reload()">重新挑戰</button>

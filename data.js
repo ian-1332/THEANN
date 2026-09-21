@@ -312,7 +312,7 @@ const QUESTION_POOL = [
  options:[
   {text:'「頂住壓力！右外野方向落地安打！三壘跑者回來得分！富邦破蛋追成一分落後，比賽還有懸念！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:100,fans:2000}},
   {text:'「終於得分了！整整等八局，這口氣總算吐出來！牛棚快頂住不要再失分！」',type:'B',effect:{speaking:18,reflex:10,data:-14,term:-12,tension:-22},social:{ptt:300,fans:-3000}},
-  {text:'「命中破冰！我就說悍將這局一定會追分！接下來要大逆轉了！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:1200}}
+  {text:'「命中破冰！我就說這局一定會追分！接下來要大逆轉了！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:1200}}
 ]},
 
 // ── 決賽（種子碼隨機抽 1 題）──
@@ -321,7 +321,7 @@ const QUESTION_POOL = [
  q:'10局下，兩出局三壘有人，李勛傑面對高壓第一球就積極出棒——擊出再見安打！富邦五比四收下勝利！這是今晚最後一棒，你的播報是？',
  roleBonus:{'v30':{optType:'A',bonus:{speaking:10,term:5}},'v7':{optType:'A',bonus:{speaking:8,term:8}}},
  options:[
-  {text:'「第一球積極進攻！打出去了！中外野方向！落地！再見安打！李勛傑！富邦悍將五比四拿下今晚的勝利！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:150,fans:4000}},
+  {text:'「第一球積極進攻！打出去了！中外野方向！落地！再見安打！李勛傑幫助球隊拿下今晚的勝利！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:150,fans:4000}},
   {text:'「打出去了！再見安打！他是今晚的超級英雄！贏了贏了！！！」',type:'B',effect:{speaking:18,reflex:10,data:-14,term:-12,tension:-22},social:{ptt:350,fans:-2000}},
   {text:'「神預言完美收尾！再見安打劇本就是我寫的！完全命中！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:2000}}
 ]},

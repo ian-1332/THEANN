@@ -833,41 +833,22 @@ function renderResult() {
 }
 
 function renderFinalMentorSection(ranking) {
-  const resultHero = document.getElementById('r-subtitle');
-  if (!resultHero) return;
-
-  const existRank = document.getElementById('final-rank-tag');
-  const existMentor = document.getElementById('final-mentor-section');
-  if (existRank) existRank.remove();
-  if (existMentor) existMentor.remove();
-
-  const rankTag = document.createElement('div');
-  rankTag.id = 'final-rank-tag';
-  rankTag.style.cssText = 'text-align:center; margin-top:14px;';
-  rankTag.innerHTML =
-    '<span style="font-size:13px; color:var(--text2);">最終排名 </span>' +
-    '<span style="font-size:22px; font-weight:700; color:var(--gold);">#' + ranking + ' / ' + (npcs.length + 1) + '</span>';
+  const mentorSection = document.getElementById('final-mentor-section');
+  if (!mentorSection) return;
 
   const mentor = getMentor();
   const score = mentorScore[selectedMentor] || 50;
   const comment = getFinalMentorComment();
   const barCls = score >= 70 ? 'final-mentor-bar-high' : score >= 40 ? 'final-mentor-bar-mid' : 'final-mentor-bar-low';
 
-  const mentorSection = document.createElement('div');
-  mentorSection.id = 'final-mentor-section';
-  mentorSection.className = 'final-mentor-section';
   mentorSection.innerHTML =
-    '<div class="section-title" style="margin-top:20px;">導師最終評語</div>' +
-    '<div class="final-mentor-card chosen-mentor">' +
-    '<div class="final-mentor-header">' +
-    '<span class="final-mentor-name">' + mentor.icon + ' ' + mentor.name + '</span>' +
-    '<span class="final-mentor-score ' + barCls + '">' + score + ' 分</span>' +
-    '</div>' +
-    '<div class="final-mentor-comment">' + comment + '</div>' +
+    '<div class="final-mentor-card chosen-mentor" style="margin-top: 16px;">' +
+      '<div class="final-mentor-header">' +
+        '<span class="final-mentor-name">' + mentor.icon + ' ' + mentor.name + '</span>' +
+        '<span class="final-mentor-score ' + barCls + '">' + score + ' 分</span>' +
+      '</div>' +
+      '<div class="final-mentor-comment">' + comment + '</div>' +
     '</div>';
-
-  resultHero.parentNode.insertBefore(rankTag, resultHero.nextSibling);
-  resultHero.parentNode.insertBefore(mentorSection, rankTag.nextSibling);
 }
 // 📸 生成高質感戰績卡 (Canvas) 與 IG 限時動態引導
 function generateShareCard() {
