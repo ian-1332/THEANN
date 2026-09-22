@@ -269,9 +269,8 @@ function calcMentorDelta(optType) {
   let delta = 0;
   mentor.likes.forEach(k    => { if (stats[k] >= 60) delta += 3; });
   mentor.dislikes.forEach(k => { if (stats[k] >= 70) delta -= 2; });
-  if (optType === mentor.optBonus)   delta += 5;
-  if (optType === mentor.optPenalty) delta -= 4;
-  delta += 3;
+  if (optType === mentor.optBonus)   delta += 3;
+  if (optType === mentor.optPenalty) delta -= 8;
   return delta;
 }
 
@@ -548,6 +547,9 @@ function timeoutChoice() {
   if (answered) return;
   answered = true;
   disableOptions();
+  mentorScore[selectedMentor] = Math.max(0, (mentorScore[selectedMentor] || 50) - 15);
+  renderMentorBar();
+  
   applyEffect(
     { speaking:-10, reflex:-10, data:-5, term:-5, tension:-10 },
     { fans:-1200 }, 'timeout'
