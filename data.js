@@ -13,7 +13,7 @@ function getTimerByDifficulty(phase) {
 // ═══ 三位導師定義 ═══
 const MENTORS = {
   qianyeye: {
-    id: 'qianyeye', name: '錢爺爺', icon: '🧮',
+    id: 'qianyeye', name: '威爺', icon: '🥸',
     title: '熱情系導師',
     likes:      ['data', 'term'],
     dislikes:   ['speaking'],
@@ -31,8 +31,8 @@ const MENTORS = {
     initBonus:  { data: 8, term: 8, reflex: 5, tension: -5 }
   },
   ningning: {
-    id: 'ningning', name: '寧寧', icon: '🎙',
-    title: '播報節奏流導師',
+    id: 'ningning', name: '吉賽兒', icon: '👾',
+    title: '節奏流導師',
     likes:      ['speaking', 'reflex', 'tension'],
     dislikes:   ['data'],
     optBonus:   'A',
@@ -248,7 +248,7 @@ const VARIANTS = [
   {id:'v31',name:'隨遇而安鬆弛型',
    desc:'抱著「大不了就這樣」的心態參賽，將比賽當作年度最大的休閒活動。',
    tags:{strength:['心態平衡','壓力免疫'],weakness:['缺乏進取心'],hidden:'鬆弛奇蹟'},
-   stats:{speaking:50,reflex:50,data:45,term:45,tension:50}},
+   stats:{speaking:50,reflex:20,data:45,term:45,tension:50}},
   {id:'v32',name:'絕境傻勁爆發型',
    desc:'平時表現平庸，但在淘汰邊緣靠著傻勁觸發隨機奇蹟爆發的變數角色。',
    tags:{strength:['逆境爆發力'],weakness:['初期表現平庸'],hidden:'絕境奇蹟'},
@@ -272,82 +272,186 @@ const VARIANTS = [
 ];// ═══ 主關卡題庫（刪題後 34 題）═══
 const QUESTION_POOL = [
 // ── 預賽 ──
-{id:'q_pre1', phase:'預賽',
- label:'3局上・陳鏞基中外野安打突破僵局',
- img:'assets/q1.png',
- q:'請看圖說故事，你如何播報這記得分？',
- roleBonus:{'v25':{optType:'A',bonus:{speaking:8,term:5}},'v30':{optType:'A',bonus:{speaking:8,term:5}}},
- options:[
-  {text:'「把握得點圈機會，打穿防線！二壘跑者邱智呈輕鬆回本壘，統一獅 1 比 0 先馳得點！」',type:'A',effect:{speaking:-3,reflex:5,data:8,term:10,tension:5},social:{ptt:80,fans:1500}},
-  {text:'「這投手太甜了！根本白白送分！投手到底在投什麼！」',type:'B',effect:{speaking:15,reflex:8,data:-12,term:-10,tension:-18},social:{ptt:250,fans:-2500}},
-  {text:'「成功突破僵局！陳鏞基今晚狀態火燙，期待他的表現！」',type:'C',effect:{speaking:10,reflex:-5,data:-14,term:-12,tension:23},social:{ptt:180,fans:1000}}
-]},
+{
+  id: 'q_pre1', phase: '預賽',
+  label: '3局上・陳鏞基中外野安打突破僵局',
+  img: 'assets/q1.png',
+  q: '請看轉播畫面，3局上兩出局一二壘有人，陳鏞基敲出關鍵平飛安打，你如何播報這記打破僵局的先制分？',
+  roleBonus: { 'v25': { optType: 'A', bonus: { speaking: 8, term: 5 } }, 'v30': { optType: 'A', bonus: { speaking: 8, term: 5 } } },
+  options: [
+    {
+      text: '「抓到得點圈機會！穿越中線平飛安打！二壘跑者邱智呈繞過三壘輕鬆回本壘，統一獅 1 比 0 先馳得點！」',
+      type: 'A',
+      effect: { speaking: 6, reflex: 6, data: 8, term: 10, tension: 5 },
+      social: { fans: 1800 }
+    },
+    {
+      text: '「這球太甜了！完全是肉包球白白送分！投手到底在投什麼啊！」',
+      type: 'B',
+      effect: { speaking: 8, reflex: 10, data: -8, term: -10, tension: -6 },
+      social: { fans: 2800 }
+    },
+    {
+      text: '「打破僵局！我就說阿基獅今晚眼神不一樣，完全照著我的預測走，接下來準備開轟！」',
+      type: 'C',
+      effect: { speaking: 8, reflex: 4, data: -12, term: -8, tension: 6 },
+      social: { fans: 1200 }
+    }
+  ]
+},
 
-{id:'q_pre2', phase:'預賽', 
- label:'關鍵局面，成功擊出安打帶走比賽',
- img:'./assets/q2.png',
- q:'請看圖說故事，你如何播報這記得分？',
- roleBonus:{'v1':{optType:'C',bonus:{fans:2500,speaking:8}},'v7':{optType:'A',bonus:{term:8,speaking:5}}},
- options:[
-  {text:'「右外野安打穿越！這是一支再見安打！」',type:'A',effect:{speaking:-3,reflex:5,data:8,term:12,tension:8},social:{ptt:80,fans:1500}},
-  {text:'「完全擋不住！氣勢上就輸了，打者也設定好球路，非常有自信的擊出。」',type:'B',effect:{speaking:15,reflex:8,data:-12,term:-10,tension:-18},social:{ptt:250,fans:-2500}},
-  {text:'「看吧神準命中！這就是球星價值」',type:'C',effect:{speaking:10,reflex:-5,data:-14,term:-12,tension:12},social:{ptt:180,fans:1000}}
-]},
+{
+  id: 'q_pre2', phase: '預賽',
+  label: '滿壘高壓・擊出再見安打終結比賽',
+  img: 'assets/q2.png',
+  q: '請看轉播畫面，九局下滿壘兩出局，打者第一球就果斷出棒！右外野落地，比賽結束！你如何收尾這場激戰？',
+  roleBonus: { 'v1': { optType: 'C', bonus: { fans: 2500, speaking: 8 } }, 'v7': { optType: 'A', bonus: { term: 8, speaking: 5 } } },
+  options: [
+    {
+      text: '「第一球出棒！穿過去了！右外野落地安打！三壘跑者踩回再見分！比賽結束！一棒向對手說再見！」',
+      type: 'A',
+      effect: { speaking: 8, reflex: 8, data: 6, term: 12, tension: 8 },
+      social: { fans: 2200 }
+    },
+    {
+      text: '「打出去了！擋不住！氣勢徹底碾壓對手！這就是超級球星的致命一擊！太帥啦！」',
+      type: 'B',
+      effect: { speaking: 10, reflex: 12, data: -8, term: -8, tension: -6 },
+      social: { fans: 4000 }
+    },
+    {
+      text: '「完全命中！看吧我剛就說這局必定再見安打！這劇本我老早就料到了！」',
+      type: 'C',
+      effect: { speaking: 8, reflex: 4, data: -14, term: -10, tension: 8 },
+      social: { fans: 1500 }
+    }
+  ]
+},
 
 // ── 準決賽 ──
-{id:'q_semi1', phase:'準決賽', 
- label:'七局上，喜歡的球隊逆轉勝，你會怎麼播報',
- q:'支持的球隊從開賽就被先發投手壓制，在最後一局安打串聯，一吐悶氣成功逆轉比賽，你會怎麼播報？',
- roleBonus:{'v6':{optType:'C',bonus:{fans:3000,speaking:10}},'v9':{optType:'A',bonus:{speaking:8,term:8}}},
- options:[
-  {text:'「這球呢！穿越!成功突破封鎖，悶了整天終於打出來了!!」',type:'A',effect:{speaking:-3,reflex:18,data:8,term:12,tension:10},social:{ptt:120,fans:1000}},
-  {text:'「打出去了！成功把握機會，擊出適時一擊」',type:'B',effect:{speaking:8,reflex:2,data:-14,term:-12,tension:-22},social:{ptt:300,fans:-300}},
-  {text:'「我就說他今晚手感燙！完全照著我的腳本走，氣勢都被拉過去了！」',type:'C',effect:{speaking:5,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:150}}
-]},
+{
+  id: 'q_semi1', phase: '準決賽',
+  label: '7局上・支持的球隊一吐怨氣大逆轉',
+  q: '你私下支持的球隊苦戰整場，終於在第七局擊出關鍵適時安打逆轉比分！面對全場沸騰，你如何兼顧專業？',
+  roleBonus: { 'v6': { optType: 'C', bonus: { fans: 3000, speaking: 10 } }, 'v9': { optType: 'A', bonus: { speaking: 8, term: 8 } } },
+  options: [
+    {
+      text: '「推向反方向！落地形成帶有兩分打點的安打」',
+      type: 'A',
+      effect: { speaking: 8, reflex: 6, data: 8, term: 12, tension: 10 },
+      social: { fans: 2000 }
+    },
+    {
+      text: '「打穿啦！太爽啦！悶了整整六局這口氣總算吐出來！逆轉啦！」',
+      type: 'B',
+      effect: { speaking: 6, reflex: 12, data: -10, term: -15, tension: -12 },
+      social: { fans: 4500 }
+    },
+    {
+      text: '「他今晚手感發燙！抓到他最擅長攻擊的球種作攻擊」',
+      type: 'C',
+      effect: { speaking: 8, reflex: 4, data: -15, term: -10, tension: 6 },
+      social: { fans: 1200 }
+    }
+  ]
+},
 
-{id:'q_semi2', phase:'準決賽',
- label:'8局下・申皓瑋安打終結零封夢',
- q:'8局下富邦悍將終於反擊，第7棒大寶寶擊出右外野安打帶有 1 分打點，三壘跑者隊長跑回本壘，城堡隊追成 1:2！比賽還沒結束，你如何掌控「氣氛由鬆轉緊」的微妙節點？',
- roleBonus:{'v18':{optType:'A',bonus:{tension:8,reflex:5}},'v32':{optType:'C',bonus:{fans:2500,speaking:8}}},
- options:[
-  {text:'「頂住壓力！右外野方向落地安打！三壘跑者回來得分！富邦破蛋追成一分落後，比賽還有懸念！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:100,fans:2000}},
-  {text:'「終於得分了！整整等八局，這口氣總算吐出來！牛棚快頂住不要再失分！」',type:'B',effect:{speaking:18,reflex:10,data:-14,term:-12,tension:-22},social:{ptt:300,fans:-3000}},
-  {text:'「命中破冰！我就說這局一定會追分！接下來要大逆轉了！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:1200}}
-]},
+{
+  id: 'q_semi2', phase: '準決賽',
+  label: '8局下・申皓瑋關鍵安打打破鴨蛋',
+  q: '8局下富邦悍將發動反攻，第7棒申皓瑋敲出右外野帶有打點的安打，打破零封局面！比數來到 1:2，比賽還有懸念，你如何帶起氣氛？',
+  roleBonus: { 'v18': { optType: 'A', bonus: { tension: 8, reflex: 5 } }, 'v32': { optType: 'C', bonus: { fans: 2500, speaking: 8 } } },
+  options: [
+    {
+      text: '「頂住兩好球壓力！右外野方向落地安打！三壘跑者范國宸回本壘得分！富邦成功破蛋，將分差縮小到一分差距！」',
+      type: 'A',
+      effect: { speaking: 8, reflex: 8, data: 8, term: 10, tension: 8 },
+      social: { fans: 2500 }
+    },
+    {
+      text: '「終於破蛋了！等了整整八局！投手要小心，對手的反攻號角吹響啦！」',
+      type: 'B',
+      effect: { speaking: 8, reflex: 10, data: -8, term: -8, tension: -8 },
+      social: { fans: 3500 }
+    },
+    {
+      text: '「我就說悍將第八局必定追分！大逆轉好戲才正要開始！」',
+      type: 'C',
+      effect: { speaking: 8, reflex: 4, data: -14, term: -10, tension: 8 },
+      social: { fans: 1600 }
+    }
+  ]
+},
 
-// ── 決賽（種子碼隨機抽 1 題）──
-{id:'q_fin1', phase:'決賽', 
- label:'10局下・李勛傑再見安打',
- q:'10局下，兩出局三壘有人，李勛傑面對高壓第一球就積極出棒——擊出再見安打！富邦五比四收下勝利！這是今晚最後一棒，你的播報是？',
- roleBonus:{'v30':{optType:'A',bonus:{speaking:10,term:5}},'v7':{optType:'A',bonus:{speaking:8,term:8}}},
- options:[
-  {text:'「第一球積極進攻！打出去了！中外野方向！落地！再見安打！李勛傑幫助球隊拿下今晚的勝利！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:150,fans:4000}},
-  {text:'「打出去了！再見安打！他是今晚的超級英雄！贏了贏了！！！」',type:'B',effect:{speaking:18,reflex:10,data:-14,term:-12,tension:-22},social:{ptt:350,fans:-2000}},
-  {text:'「神預言完美收尾！再見安打劇本就是我寫的！完全命中！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:2000}}
-]},
+// ── 決賽（冠軍爭奪）──
+{
+  id: 'q_fin1', phase: '決賽',
+  label: '10局延長・李勛傑再見安打封王戰',
+  q: '十局延長賽滿壘、兩出局！李勛傑鎖定偏高直球第一球揮擊——球飛越內野防線！這是決定年度冠軍的瞬間，你的終極播報是？',
+  roleBonus: { 'v30': { optType: 'A', bonus: { speaking: 10, term: 5 } }, 'v7': { optType: 'A', bonus: { speaking: 8, term: 8 } } },
+  options: [
+    {
+      text: '「抓第一球！中外野方向落地安打！三壘跑者奔回本壘！比賽結束！李勛傑一棒定江山，幫助球隊拿下今晚勝利！」',
+      type: 'A',
+      effect: { speaking: 10, reflex: 10, data: 8, term: 14, tension: 12 },
+      social: { fans: 5000 }
+    },
+    {
+      text: '「打出去了！落地啦贏啦！再見安打！他是今晚的超級大英雄！全場瘋狂慶祝！」',
+      type: 'B',
+      effect: { speaking: 10, reflex: 14, data: -6, term: -10, tension: -8 },
+      social: { fans: 6000 }
+    },
+    {
+      text: '「神預言！這記再見安打完全在我意料之中！」',
+      type: 'C',
+      effect: { speaking: 5, reflex: 4, data: -16, term: -10, tension: 10 },
+      social: { fans: 2500 }
+    }
+  ]
+},
 
-{id:'q_fin2', phase:'決賽', 
- label:'8局下・梁家榮中外野安打追平',
- q:'8局下，梁家榮抓低球推往中線，成熟打者關鍵一擊追平比分！四比四，比賽回到原點！你如何播報這個讓全場沸騰的追平時刻？',
- roleBonus:{'v9':{optType:'A',bonus:{speaking:8,term:8}},'v36':{optType:'C',bonus:{fans:3000,speaking:10}}},
- options:[
-  {text:'「抓低球推往中線！穿過去了！帶有打點！梁家榮追平比分！四比四！比賽回到原點！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:150,fans:4000}},
-  {text:'「追平啦！終結者放火！棒球最刺激的時刻就是現在！全場都瘋了！」',type:'B',effect:{speaking:18,reflex:10,data:-14,term:-12,tension:-22},social:{ptt:350,fans:-2000}},
-  {text:'「完全命中！我就說阿銀這棒必定追平！接下來等我預測再見砲！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:2000}}
-]},
-
-{id:'q_fin3', phase:'決賽', 
- label:'逆轉・朱迦恩右外野安打得2分',
- q:'兩好兩壞滿球數，朱迦恩果斷出棒，擊出右外野安打帶兩分打點，統一獅完成大逆轉！這是今晚最戲劇性的一棒，你如何收尾？',
- roleBonus:{'v32':{optType:'C',bonus:{fans:3500,speaking:10}},'v25':{optType:'A',bonus:{speaking:8,term:8}}},
- options:[
-  {text:'「兩好兩壞滿球數！果斷出棒！右外野方向！穿越！帶有兩分打點！統一獅完成大逆轉！朱迦恩！今晚的英雄！」',type:'A',effect:{speaking:-3,reflex:8,data:8,term:12,tension:10},social:{ptt:150,fans:4000}},
-  {text:'「逆轉啦！兩分打點！太神了！悍將牛棚放火啦！完全守不住！」',type:'B',effect:{speaking:18,reflex:10,data:-14,term:-12,tension:-22},social:{ptt:350,fans:-2000}},
-  {text:'「逆轉啦！兩分打點一棒逆轉！朱迦恩超級英雄！這劇本我老早就預測到了！」',type:'C',effect:{speaking:12,reflex:-5,data:-16,term:-14,tension:14},social:{ptt:200,fans:2000}}
-]}
-
+{ id: 'q_fin2', phase: '決賽',
+  label: '8局下・梁家榮中線安打追平戰局',
+  q: '八局下，兩出局二三壘有人，梁家榮沉穩鎖定低球推往中線穿越！四比四，你如何播報這個讓全場沸騰的關鍵追平？',
+  roleBonus: { 'v9': { optType: 'A', bonus: { speaking: 8, term: 8 } }, 'v36': { optType: 'C', bonus: { fans: 3000, speaking: 10 } } },
+  options: [
+    {
+      text: '「抓低球打穿越中間防線帶有兩分打點！梁家榮展現價值！四比四！比賽回到原點！」',
+      type: 'A',
+      effect: { speaking: 10, reflex: 8, data: 8, term: 12, tension: 10 },
+      social: { fans: 4500 }   },
+    { text: '「追平啦！棒球最刺激的時刻就是現在，心臟快受不了！」',
+      type: 'B',
+      effect: { speaking: 8, reflex: 10, data: -8, term: -8, tension: -8 },
+      social: { fans: 5500 }    },
+    {     text: '「我就說阿銀這棒必定建功！完全命中追平劇本！接下來等我預測再見轟！」',
+      type: 'C',
+      effect: { speaking: 8, reflex: 4, data: -14, term: -10, tension: 8 },
+      social: { fans: 2200 }  }
+  ]
+},
+{
+  id: 'q_fin3', phase: '決賽',
+  label: '滿球數生死對決・朱迦恩逆轉安打',
+  q: '九局下兩好三壞滿球數，朱迦恩果斷推打出右外野穿越安打送回兩分，完成不可思議的大逆轉！面對這記安打，你如何收尾？',
+  roleBonus: { 'v32': { optType: 'C', bonus: { fans: 3500, speaking: 10 } }, 'v25': { optType: 'A', bonus: { speaking: 8, term: 8 } } },
+  options: [
+    { text: '「滿球數果斷出棒！穿越內野防線！兩分打點！統一獅完成逆轉！朱迦恩！今晚的救世主！」',
+      type: 'A',
+      effect: { speaking: 10, reflex: 10, data: 8, term: 12, tension: 12 },
+      social: { fans: 5000 }   },
+    { text: '「逆轉啦！兩分打點！太扯啦！牛棚完全壓不住，救援失敗，完全擋不住的奇蹟夜！」',
+      type: 'B',
+      effect: { speaking: 8, reflex: 14, data: -8, term: -10, tension: -8 },
+      social: { fans: 6000 }   },
+    { text: '「逆轉大奇蹟完全被我算中！朱迦恩今晚就是超級英雄，完全按照我的預言走！」',
+      type: 'C',
+      effect: { speaking: 8, reflex: 4, data: -16, term: -10, tension: 10 },
+      social: { fans: 2500 }   }
+  ]
+}
 ];
-
 const SPECIAL_POOL = [
 
 {id:'s01',label:'場外事件：休息室的挑釁',isEvent:true,

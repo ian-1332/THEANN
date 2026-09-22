@@ -153,9 +153,19 @@ document.addEventListener('DOMContentLoaded', () => {
     showScreen('result-screen');
     renderResult();
   });
+
+  // 📸 戰績卡按鈕綁定
   const shareBtn = document.getElementById('share-card-btn');
   if (shareBtn) {
     shareBtn.addEventListener('click', generateShareCard);
+  }
+
+  // 🌟 參考圖風格：頂部狀態選單展開/收合
+  const statusCard = document.getElementById('status-dropdown-btn');
+  if (statusCard) {
+    statusCard.addEventListener('click', () => {
+      statusCard.classList.toggle('open');
+    });
   }
 });
 
@@ -166,24 +176,6 @@ function checkEnterBtn() {
   if (!nameEl || !ageEl || !enterEl) return;
   const ok = nameEl.value.trim() !== '' && ageEl.value.trim() !== '' && selectedMentor !== null;
   enterEl.disabled = !ok;
-}
-// 🌟 讓頂部狀態卡片可以點擊展開/收合
-document.addEventListener('DOMContentLoaded', () => {
-  const statusCard = document.getElementById('status-dropdown-btn');
-  if (statusCard) {
-    statusCard.addEventListener('click', () => {
-      statusCard.classList.toggle('open');
-    });
-  }
-});
-
-// 🌟 同步更新頂部摘要文字（例如總分與排名）
-function updateDscSummary() {
-  const summaryEl = document.getElementById('dsc-player-summary');
-  if (!summaryEl) return;
-  const total = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
-  const rank = calcRanking();
-  summaryEl.textContent = '綜合戰力：' + total + ' | 目前排名 #' + rank;
 }
 
 // ═══════════════════════════════════════
@@ -224,14 +216,10 @@ function pickQuestions(seed) {
 function pickSpecials(seed) {
   const n    = seedToNum(seed);
   const pool = [...SPECIAL_POOL];
-  
-  // 🎲 運用種子碼對事件池進行真正的洗牌
   for (let i = pool.length - 1; i > 0; i--) {
     const j = (n * (i + 7)) % (i + 1);
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  
-  // 洗完後直接取前 2 個
   return pool.slice(0, 2);
 }
 
@@ -246,41 +234,20 @@ function getTimer(stage) {
 }
 
 function calcRanking() {
- const statSum = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
-  const mentorPts = (mentorScore[selectedMentor] || 50) * 1.2;
+  const statSum = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
+  const mentorPts = (mentorScore[selectedMentor] || 50) * 1.5;
   const playerFinalScore = statSum + mentorPts;
-
   return npcs.filter(n => n.total > playerFinalScore).length + 1;
 }
 
 function updateRankDisplayOnPanel() {
   const rank  = calcRanking();
   const total = npcs.length + 1;
-  const rankValEl = document.getElementById('rank-val');
-  const rankTrendEl = document.getElementById('rank-trend');
-  // 📱 同步更新手機版極簡頂部列的排名
-  const rankMiniEl = document.getElementById('rank-val-mini');
-  if (rankMiniEl) rankMiniEl.textContent = '#' + rank + '/' + total;
-
-  if (rankValEl) {
-    rankValEl.innerHTML = '#' + rank + '<span class="sc-val-unit">/' + total + '</span>';
-  }
+  const summaryEl = document.getElementById('dsc-player-summary');
   
-  if (rankValEl) {
-    rankValEl.innerHTML = '#' + rank + '<span class="sc-val-unit">/' + total + '</span>';
-  }
-  
-  if (rankTrendEl) {
-    if (rank === 1) {
-      rankTrendEl.textContent = '👑 目前領先群雄';
-      rankTrendEl.className = 'social-trend trend-up';
-    } else if (rank <= 3) {
-      rankTrendEl.textContent = '🔥 晉級安全區';
-      rankTrendEl.className = 'social-trend trend-up';
-    } else {
-      rankTrendEl.textContent = '⚠️ 處於淘汰邊緣';
-      rankTrendEl.className = 'social-trend trend-down';
-    }
+  if (summaryEl) {
+    const totalStats = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
+    summaryEl.textContent = '綜合戰力：' + totalStats + ' | 目前排名 #' + rank + '/' + total;
   }
 }
 
@@ -324,8 +291,6 @@ function renderMentorBar() {
   if (fill)  fill.style.width  = score + '%';
   if (val)   val.textContent   = score;
   if (label) label.textContent = mentor.icon + ' ' + mentor.name;
-  const mentorMiniEl = document.getElementById('mentor-mini-label');
-  if (mentorMiniEl) mentorMiniEl.textContent = mentor.icon + ' ' + mentor.name + ': ' + score + '分';
 }
 
 function getFinalMentorComment() {
@@ -466,33 +431,12 @@ function updateStats() {
     if (bar) bar.style.width = v + '%';
     if (val) val.textContent = v;
   });
+  updateRankDisplayOnPanel();
 }
 
 function updateSocial(dFans) {
   fans = Math.max(0, fans + dFans);
-  const fanEl = document.getElementById('fans-val');
-  if (fanEl) fanEl.innerHTML = formatNum(fans) + '<span class="sc-val-unit">人</span>';
-  setTrend('fans-trend', dFans);
   updateRankDisplayOnPanel();
-}
-
-function formatNum(n) {
-  return n >= 10000 ? (n / 10000).toFixed(1) + '萬' : n.toLocaleString();
-}
-
-function setTrend(id, d) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  if (d > 0) {
-    el.textContent = '▲ +' + Math.abs(d).toLocaleString();
-    el.className   = 'social-trend trend-up';
-  } else if (d < 0) {
-    el.textContent = '▼ ' + d.toLocaleString();
-    el.className   = 'social-trend trend-down';
-  } else {
-    el.textContent = '— 持平';
-    el.className   = 'social-trend trend-flat';
-  }
 }
 
 function loadStage() {
@@ -508,8 +452,6 @@ function loadStage() {
 
   updatePips();
   updateStats();
-  updateRankDisplayOnPanel();
-  updateDscSummary(); 
 
   const gameScreen  = document.getElementById('game-screen');
   const finalBanner = document.getElementById('final-banner');
@@ -526,11 +468,11 @@ function loadStage() {
   if (labelEl) {
     if (stage.isEvent) {
       labelEl.textContent = '⚡ 特殊關卡 ' + stage.label;
-      labelEl.className   = 'question-label event-label';
+      labelEl.className   = 'ec-category event-label';
     } else {
       const diffTag = diffInfo ? '<span class="difficulty-tag ' + diffInfo.cls + '">' + diffInfo.label + '</span>' : '';
       labelEl.innerHTML = '[' + stage.phase + '] ' + stage.label + ' ' + diffTag;
-      labelEl.className = 'question-label';
+      labelEl.className = 'ec-category';
     }
   }
 
@@ -690,8 +632,16 @@ function applyEffect(eff, social, optType, mult = 1) {
     }
   });
   if (any) dp.className = 'delta-panel show';
+  const zeroCount = STAT_KEYS.filter(k => stats[k] <= 0).length;
+  const totalStats = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
+  const currentMentorScore = mentorScore[selectedMentor] || 50;
 
-  if (STAT_KEYS.some(k => stats[k] <= 0)) pendingElim = true;
+  const isSkillCollapsed = zeroCount >= 2 || totalStats < 160;
+  const isMentorFired = zeroCount >= 1 && currentMentorScore < 40;
+
+  if (isSkillCollapsed || isMentorFired) {
+    pendingElim = true;
+  }
 }
 
 function showFeedback(optType) {
@@ -735,7 +685,6 @@ function finishTurn() {
     if (nextBtn) nextBtn.className = 'btn-primary next-btn show';
   }
 }
-
 // ═══════════════════════════════════════
 //  淘汰、復活與結果頁
 // ═══════════════════════════════════════
@@ -744,9 +693,27 @@ function goEliminated() {
   const gameScreen = document.getElementById('game-screen');
   if (gameScreen) gameScreen.classList.remove('is-final');
 
-  const zeroed = STAT_KEYS.filter(k => stats[k] <= 0).map(k => STAT_NAMES[k]).join('、');
+  const zeroed = STAT_KEYS.filter(k => stats[k] <= 0).map(k => STAT_NAMES[k]);
+  const totalStats = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
+  const currentMentorScore = mentorScore[selectedMentor] || 50;
+  const mentor = getMentor();
   const sub = document.getElementById('elim-sub');
-  if (sub) sub.innerHTML = '你的<strong>' + zeroed + '</strong>已耗盡歸零，狀態徹底崩潰，被迫離開選秀舞台（種子碼：' + currentSeed + '）。';
+
+  if (sub) {
+    // 原因 1：被導師親手開除
+    if (zeroed.length >= 1 && currentMentorScore < 40) {
+      sub.innerHTML = '你的<strong>【' + zeroed.join('、') + '】</strong>歸零，且導師信任度僅剩 <strong>' + currentMentorScore + ' 分</strong>！<br>' +
+        mentor.icon + ' ' + mentor.name + ' 導師無奈搖頭：「基本功不穩又屢勸不聽，我無法再帶你了。」你遭到導師親手淘汰（種子碼：' + currentSeed + '）。';
+    } 
+    // 原因 2：多項能力全面崩盤
+    else if (zeroed.length >= 2) {
+      sub.innerHTML = '你的<strong>【' + zeroed.join('、') + '】</strong>多項能力同時崩潰歸零，直播現場陷入重大失誤，被迫離開選秀舞台（種子碼：' + currentSeed + '）。';
+    } 
+    // 原因 3：總戰力過低
+    else {
+      sub.innerHTML = '你的綜合戰力僅剩 <strong>' + totalStats + ' 分</strong>，整體表現與同儕差距過大，慘遭選秀評審團末位淘汰（種子碼：' + currentSeed + '）。';
+    }
+  }
 
   const reviveBox = document.getElementById('revive-box');
   if (reviveBox) reviveBox.style.display = hasRevived ? 'none' : 'block';
@@ -816,9 +783,6 @@ function renderResult() {
 
   const fanEl = document.getElementById('r-fans');
   if (fanEl) fanEl.textContent = formatNum(fans);
-  // 🏆 將最終排名顯示在輿論聲勢的格子裡
-  const finalRankEl = document.getElementById('r-final-rank');
-  if (finalRankEl) finalRankEl.textContent = '#' + ranking;
 
   STAT_KEYS.forEach(k => {
     const v = Math.max(0, Math.min(100, stats[k]));
@@ -833,131 +797,195 @@ function renderResult() {
 }
 
 function renderFinalMentorSection(ranking) {
-  const mentorSection = document.getElementById('final-mentor-section');
-  if (!mentorSection) return;
+  const resultHero = document.getElementById('r-subtitle');
+  if (!resultHero) return;
+
+  const existRank = document.getElementById('final-rank-tag');
+  const existMentor = document.getElementById('final-mentor-section');
+  if (existRank) existRank.remove();
+  if (existMentor) existMentor.remove();
+
+  const rankTag = document.createElement('div');
+  rankTag.id = 'final-rank-tag';
+  rankTag.style.cssText = 'text-align:center; margin-top:14px;';
+  rankTag.innerHTML =
+    '<span style="font-size:13px; color:var(--text2);">最終排名 </span>' +
+    '<span style="font-size:22px; font-weight:700; color:var(--gold);">#' + ranking + ' / ' + (npcs.length + 1) + '</span>';
 
   const mentor = getMentor();
   const score = mentorScore[selectedMentor] || 50;
   const comment = getFinalMentorComment();
   const barCls = score >= 70 ? 'final-mentor-bar-high' : score >= 40 ? 'final-mentor-bar-mid' : 'final-mentor-bar-low';
 
+  const mentorSection = document.createElement('div');
+  mentorSection.id = 'final-mentor-section';
+  mentorSection.className = 'final-mentor-section';
   mentorSection.innerHTML =
-    '<div class="final-mentor-card chosen-mentor" style="margin-top: 16px;">' +
-      '<div class="final-mentor-header">' +
-        '<span class="final-mentor-name">' + mentor.icon + ' ' + mentor.name + '</span>' +
-        '<span class="final-mentor-score ' + barCls + '">' + score + ' 分</span>' +
-      '</div>' +
-      '<div class="final-mentor-comment">' + comment + '</div>' +
+    '<div class="section-title" style="margin-top:20px;">導師最終評語</div>' +
+    '<div class="final-mentor-card chosen-mentor">' +
+    '<div class="final-mentor-header">' +
+    '<span class="final-mentor-name">' + mentor.icon + ' ' + mentor.name + '</span>' +
+    '<span class="final-mentor-score ' + barCls + '">' + score + ' 分</span>' +
+    '</div>' +
+    '<div class="final-mentor-comment">' + comment + '</div>' +
     '</div>';
+
+  resultHero.parentNode.insertBefore(rankTag, resultHero.nextSibling);
+  resultHero.parentNode.insertBefore(mentorSection, rankTag.nextSibling);
 }
-// 📸 生成高質感戰績卡 (Canvas) 與 IG 限時動態引導
+
+// 📸 生成戰績卡主函數
 function generateShareCard() {
   const canvas = document.createElement('canvas');
-  canvas.width = 1080;  // 採用 IG 限時動態標準黃金比例 9:16 (1080x1920)
-  canvas.height = 1920;
+  canvas.width = 1080;
+  canvas.height = 1300;
   const ctx = canvas.getContext('2d');
-
-  const bgImg = new Image();
-  bgImg.src = '"C:\\新增資料夾\\題目測試\\assets\\r1.png"'; // 👈 你未來可以在這裡放一張精美的底圖
-  
-  bgImg.onload = () => {
-    // 如果有底圖，畫出底圖
-    ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
-    drawCardContent(ctx, canvas);
-  };
-
-  bgImg.onerror = () => {
-    // 如果沒有放底圖，自動退回精緻的黑金漸層背景
-    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-    grad.addColorStop(0, '#090b10');
-    grad.addColorStop(0.5, '#181408');
-    grad.addColorStop(1, '#050505');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    drawCardContent(ctx, canvas);
-  };
+  drawCardContent(ctx, canvas);
 }
 
+// 📸 繪製戰績卡內容
 function drawCardContent(ctx, canvas) {
-  // 裝飾性金銀邊框
-  ctx.strokeStyle = '#f5c842';
-  ctx.lineWidth = 12;
-  ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0, '#090b10');
+  grad.addColorStop(0.5, '#121622');
+  grad.addColorStop(1, '#050505');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 頂部 LOGO 標題
+  ctx.strokeStyle = '#f5c842';
+  ctx.lineWidth = 8;
+  ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
   ctx.fillStyle = '#94a3b8';
-  ctx.font = 'bold 28px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('DAZN ORIGINAL × THE ANNOUNCER', canvas.width / 2, 160);
+  ctx.font = 'bold 22px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('THE ANNOUNCER OFFICIAL CARD', 70, 95);
 
   ctx.fillStyle = '#f5c842';
-  ctx.font = '900 64px sans-serif';
-  ctx.fillText('主播選秀戰績結算卡', canvas.width / 2, 250);
+  ctx.font = '900 52px sans-serif';
+  ctx.fillText('主播選秀戰績結算卡', 70, 160);
 
-  // 玩家資訊卡面
-  ctx.fillStyle = 'rgba(24, 28, 36, 0.85)';
-  ctx.fillRect(100, 320, canvas.width - 200, 220);
+  ctx.fillStyle = '#181c24';
+  ctx.fillRect(70, 200, canvas.width - 140, 140);
   ctx.strokeStyle = '#3f485f';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(100, 320, canvas.width - 200, 220);
+  ctx.lineWidth = 2;
+  ctx.strokeRect(70, 200, canvas.width - 140, 140);
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 40px sans-serif';
-  ctx.fillText('選手：' + playerName + ' (' + playerAge + '歲)', canvas.width / 2, 410);
+  ctx.font = 'bold 28px sans-serif';
+  ctx.fillText('選手：' + playerName + ' (' + playerAge + '歲)', 100, 250);
 
   const rank = calcRanking();
   ctx.fillStyle = '#f5c842';
-  ctx.font = '900 72px sans-serif';
-  ctx.fillText('最終排名：#' + rank + ' / ' + (npcs.length + 1), canvas.width / 2, 490);
+  ctx.font = '900 48px sans-serif';
+  ctx.fillText('最終排名：#' + rank + ' / ' + (npcs.length + 1), 100, 310);
 
-  // 五角戰力統計面板
-  ctx.fillStyle = 'rgba(24, 28, 36, 0.85)';
-  ctx.fillRect(100, 600, canvas.width - 200, 680);
+  const totalStats = STAT_KEYS.reduce((s, k) => s + (stats[k] || 0), 0);
+  const boxWidth = (canvas.width - 160) / 2;
+  const boxHeight = 110;
+
+  drawStatBox(ctx, 70, 370, boxWidth, boxHeight, '綜合評分 OVR', totalStats, '#3ecf7a');
+  drawStatBox(ctx, 90 + boxWidth, 370, boxWidth, boxHeight, '獲得粉絲', formatNum(fans), '#a078f8');
+
+  ctx.fillStyle = '#181c24';
+  ctx.fillRect(70, 510, canvas.width - 140, 480);
   ctx.strokeStyle = '#3f485f';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(100, 600, canvas.width - 200, 680);
+  ctx.strokeRect(70, 510, canvas.width - 140, 480);
 
   ctx.fillStyle = '#f5c842';
-  ctx.font = 'bold 36px sans-serif';
-  ctx.textAlign = 'left';
-  ctx.fillText('【五角戰力總結】', 160, 680);
+  ctx.font = 'bold 26px sans-serif';
+  ctx.fillText('【 五角能力細節 】', 100, 570);
 
-  let startY = 770;
+  let startY = 630;
   STAT_KEYS.forEach((k, idx) => {
     const val = stats[k] || 0;
     ctx.fillStyle = '#94a3b8';
-    ctx.font = 'bold 28px sans-serif';
-    ctx.fillText(STAT_NAMES[k], 160, startY + (idx * 110));
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillText(STAT_NAMES[k], 100, startY + (idx * 80));
 
-    // 戰力條背景
     ctx.fillStyle = '#2e3646';
-    ctx.fillRect(320, startY - 22 + (idx * 110), 500, 24);
+    ctx.fillRect(220, startY - 18 + (idx * 80), 540, 20);
 
-    // 戰力條填滿
-    ctx.fillStyle = '#3ecf7a';
-    ctx.fillRect(320, startY - 22 + (idx * 110), (500 * (val / 100)), 24);
+    ctx.fillStyle = val >= 80 ? '#3ecf7a' : val >= 50 ? '#f5c842' : '#e84040';
+    ctx.fillRect(220, startY - 18 + (idx * 80), (540 * (val / 100)), 20);
 
-    // 數值
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 32px sans-serif';
-    ctx.fillText(val, 850, startY + (idx * 110));
+    ctx.font = 'bold 26px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(val, canvas.width - 100, startY + (idx * 80));
+    ctx.textAlign = 'left';
   });
 
-  // 底部宣傳標語
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '24px sans-serif';
+  ctx.fillStyle = '#181c24';
+  ctx.fillRect(70, 1020, canvas.width - 140, 160);
+  ctx.strokeStyle = '#3f485f';
+  ctx.strokeRect(70, 1020, canvas.width - 140, 160);
+
+  ctx.fillStyle = '#f5c842';
+  ctx.font = 'bold 24px sans-serif';
+  ctx.fillText('【 生涯稱號與榮譽 】', 100, 1070);
+
+  const badges = [];
+  if (rank === 1) badges.push('👑 選秀狀元');
+  if (stats.speaking >= 80) badges.push('🎙 金嗓主播');
+  if (stats.data >= 80) badges.push('📊 數據魔人');
+  if (fans >= 5000) badges.push('✨ 人氣巨星');
+  if (wasRevived) badges.push('🔥 浴火重生');
+  if (badges.length === 0) badges.push('🌱 潛力新秀');
+
+  let badgeX = 100;
+  let badgeY = 1115;
+  ctx.font = 'bold 18px sans-serif';
+  badges.forEach(badge => {
+    const textWidth = ctx.measureText(badge).width + 30;
+    if (badgeX + textWidth > canvas.width - 100) {
+      badgeX = 100;
+      badgeY += 45;
+    }
+    ctx.fillStyle = 'rgba(160, 120, 248, 0.15)';
+    ctx.fillRect(badgeX, badgeY, textWidth, 36);
+    ctx.strokeStyle = '#a078f8';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(badgeX, badgeY, textWidth, 36);
+    
+    ctx.fillStyle = '#c0a0ff';
+    ctx.fillText(badge, badgeX + 15, badgeY + 24);
+    badgeX += textWidth + 15;
+  });
+
+  ctx.fillStyle = '#64748b';
+  ctx.font = '18px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('種子碼: ' + currentSeed + ' | 挑戰你的播報極限', canvas.width / 2, 1720);
+  ctx.fillText('種子碼: ' + currentSeed + '  |  THE ANNOUNCER 官方認證戰績卡', canvas.width / 2, 1240);
 
-  // 觸發下載
-  const link = document.createElement('a');
-  link.download = playerName + '_主播戰績卡.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-
-  // 💡 導引玩家發布 IG 限時動態
   setTimeout(() => {
-    alert('📸 戰績卡已成功下載！\n\n現在您可以打開 Instagram，將這張戰績卡發布到【限時動態】並標記我們囉！🔥');
+    const link = document.createElement('a');
+    link.download = playerName + '_主播戰績卡.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }, 150);
+
+  setTimeout(() => {
+    alert('📸 戰績卡已成功下載！\n\n您可以將這張精美戰績卡發布到 IG 限時動態或 Threads 炫耀囉！🔥');
   }, 500);
+}
+
+function drawStatBox(ctx, x, y, w, h, label, value, color) {
+  ctx.fillStyle = '#181c24';
+  ctx.fillRect(x, y, w, h);
+  ctx.strokeStyle = '#3f485f';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(x, y, w, h);
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '18px sans-serif';
+  ctx.fillText(label, x + 20, y + 35);
+
+  ctx.fillStyle = color;
+  ctx.font = 'bold 38px sans-serif';
+  ctx.fillText(value, x + 20, y + 82);
+}
+// 🔢 數字格式化工具（將大數字轉為「萬」）
+function formatNum(n) {
+  return n >= 10000 ? (n / 10000).toFixed(1) + '萬' : n.toLocaleString();
 }
