@@ -845,19 +845,44 @@ function generateShareCard() {
   drawCardContent(ctx, canvas);
 }
 
-// 📸 繪製戰績卡內容
+// 📸 官方底圖融合版：生成精美戰績卡 (Canvas)
 function drawCardContent(ctx, canvas) {
-  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  grad.addColorStop(0, '#090b10');
-  grad.addColorStop(0.5, '#121622');
-  grad.addColorStop(1, '#050505');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // 1. 載入官方背景底圖
+  const bgImg = new Image();
+  bgImg.src = 'assets/result_bg.png'; 
+  
+  bgImg.onload = () => {
+    // 繪製底圖（鋪滿整個 Canvas）
+    ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+    // 疊加半透明暗色遮罩，讓文字和數據更立體突出
+    ctx.fillStyle = 'rgba(9, 11, 16, 0.75)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // 繪製上層所有數據內容
+    renderCardOverlay(ctx, canvas);
+  };
 
+  bgImg.onerror = () => {
+    // 防呆：如果找不到底圖，自動退回原本的深色漸層
+    const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+    grad.addColorStop(0, '#090b10');
+    grad.addColorStop(0.5, '#121622');
+    grad.addColorStop(1, '#050505');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    renderCardOverlay(ctx, canvas);
+  };
+}
+
+// 繪製上層的數據與卡片內容
+function renderCardOverlay(ctx, canvas) {
+  // 金色雙層邊框
   ctx.strokeStyle = '#f5c842';
   ctx.lineWidth = 8;
   ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
 
+  // 頂部主標題
   ctx.fillStyle = '#94a3b8';
   ctx.font = 'bold 22px sans-serif';
   ctx.textAlign = 'left';
@@ -867,7 +892,17 @@ function drawCardContent(ctx, canvas) {
   ctx.font = '900 52px sans-serif';
   ctx.fillText('主播選秀戰績結算卡', 70, 160);
 
-  ctx.fillStyle = '#181c24';
+  // 載入右上角官方 Logo (B1.png)
+  const logoImg = new Image();
+  logoImg.src = 'assets/B1.png';
+  logoImg.onload = () => {
+    const logoW = 160;
+    const logoH = (logoImg.height / logoImg.width) * logoW;
+    ctx.drawImage(logoImg, canvas.width - 70 - logoW, 80, logoW, logoH);
+  };
+
+  // 選手大名與排名摘要區塊（帶有半透明毛玻璃質感）
+  ctx.fillStyle = 'rgba(24, 28, 36, 0.85)';
   ctx.fillRect(70, 200, canvas.width - 140, 140);
   ctx.strokeStyle = '#3f485f';
   ctx.lineWidth = 2;
@@ -882,6 +917,7 @@ function drawCardContent(ctx, canvas) {
   ctx.font = '900 48px sans-serif';
   ctx.fillText('最終排名：#' + rank + ' / ' + (npcs.length + 1), 100, 310);
 
+  // 四宮格數據方塊
   const totalStats = STAT_KEYS.reduce((s, k) => s + (stats[k] || 0), 0);
   const boxWidth = (canvas.width - 160) / 2;
   const boxHeight = 110;
@@ -889,7 +925,8 @@ function drawCardContent(ctx, canvas) {
   drawStatBox(ctx, 70, 370, boxWidth, boxHeight, '綜合評分 OVR', totalStats, '#3ecf7a');
   drawStatBox(ctx, 90 + boxWidth, 370, boxWidth, boxHeight, '獲得粉絲', formatNum(fans), '#a078f8');
 
-  ctx.fillStyle = '#181c24';
+  // 五角戰力詳細條形圖
+  ctx.fillStyle = 'rgba(24, 28, 36, 0.85)';
   ctx.fillRect(70, 510, canvas.width - 140, 480);
   ctx.strokeStyle = '#3f485f';
   ctx.strokeRect(70, 510, canvas.width - 140, 480);
@@ -918,7 +955,8 @@ function drawCardContent(ctx, canvas) {
     ctx.textAlign = 'left';
   });
 
-  ctx.fillStyle = '#181c24';
+  // 榮譽徽章區
+  ctx.fillStyle = 'rgba(24, 28, 36, 0.85)';
   ctx.fillRect(70, 1020, canvas.width - 140, 160);
   ctx.strokeStyle = '#3f485f';
   ctx.strokeRect(70, 1020, canvas.width - 140, 160);
@@ -944,7 +982,7 @@ function drawCardContent(ctx, canvas) {
       badgeX = 100;
       badgeY += 45;
     }
-    ctx.fillStyle = 'rgba(160, 120, 248, 0.15)';
+    ctx.fillStyle = 'rgba(160, 120, 248, 0.2)';
     ctx.fillRect(badgeX, badgeY, textWidth, 36);
     ctx.strokeStyle = '#a078f8';
     ctx.lineWidth = 1.5;
@@ -955,21 +993,23 @@ function drawCardContent(ctx, canvas) {
     badgeX += textWidth + 15;
   });
 
-  ctx.fillStyle = '#64748b';
+  // 底部標語與種子碼
+  ctx.fillStyle = '#94a3b8';
   ctx.font = '18px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('種子碼: ' + currentSeed + '  |  THE ANNOUNCER 官方認證戰績卡', canvas.width / 2, 1240);
 
+  // 延遲觸發下載，確保所有圖層繪製完畢
   setTimeout(() => {
     const link = document.createElement('a');
     link.download = playerName + '_主播戰績卡.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
-  }, 150);
+  }, 200);
 
   setTimeout(() => {
-    alert('📸 戰績卡已成功下載！\n\n您可以將這張精美戰績卡發布到 IG 限時動態或 Threads 炫耀囉！🔥');
-  }, 500);
+    alert('📸 官方認證戰績卡已成功下載！\n\n快上傳到 IG 限時動態炫耀吧！🔥');
+  }, 600);
 }
 
 function drawStatBox(ctx, x, y, w, h, label, value, color) {
