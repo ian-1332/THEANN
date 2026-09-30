@@ -22,7 +22,7 @@ const MENTORS = {
     initBonus:  { data: -5, term: 10, speaking: -5 }
   },
   dapangge: {
-    id: 'dapangge', name: '大胖哥哥', icon: '📚',
+    id: 'dapangge', name: '小石', icon: '📚',
     title: '歷史資料庫導師',
     likes:      ['data', 'term', 'reflex'],
     dislikes:   ['tension'],
@@ -274,13 +274,13 @@ const QUESTION_POOL = [
 // ── 預賽 ──
 {
   id: 'q_pre1', phase: '預賽',
-  label: '3局上・陳鏞基中外野安打突破僵局',
+  label: '3局上・中外野安打突破僵局',
   img: 'assets/q1.png',
-  q: '請看轉播畫面，3局上兩出局一二壘有人，陳鏞基敲出關鍵平飛安打，你如何播報這記打破僵局的先制分？',
+  q: '請看轉播畫面，3局上兩出局二三壘有人，林可怕敲出關鍵平飛安打，你如何播報這記打破僵局的先制分？',
   roleBonus: { 'v25': { optType: 'A', bonus: { speaking: 8, term: 5 } }, 'v30': { optType: 'A', bonus: { speaking: 8, term: 5 } } },
   options: [
     {
-      text: '「抓到得點圈機會！穿越中線平飛安打！二壘跑者邱智呈繞過三壘輕鬆回本壘，統一獅 1 比 0 先馳得點！」',
+      text: '「抓到得點圈機會！穿越中線平飛安打！壘上跑者輕鬆回本壘得分，2 比 0 先馳得點！」',
       type: 'A',
       effect: { speaking: 6, reflex: 6, data: 8, term: 10, tension: 5 },
       social: { fans: 1800 }
@@ -292,7 +292,7 @@ const QUESTION_POOL = [
       social: { fans: 2800 }
     },
     {
-      text: '「打破僵局！我就說阿基獅今晚眼神不一樣，完全照著我的預測走，接下來準備開轟！」',
+      text: '「打破僵局！我就說可怕今晚眼神不一樣，完全照著我的預測走，繼續期待接下來的進攻！」',
       type: 'C',
       effect: { speaking: 8, reflex: 4, data: -12, term: -8, tension: 6 },
       social: { fans: 1200 }
@@ -303,8 +303,7 @@ const QUESTION_POOL = [
 {
   id: 'q_pre2', phase: '預賽',
   label: '滿壘高壓・擊出再見安打終結比賽',
-  img: 'assets/q2.png',
-  q: '請看轉播畫面，九局下滿壘兩出局，打者第一球就果斷出棒！右外野落地，比賽結束！你如何收尾這場激戰？',
+  q: '九局下滿壘兩出局，打者第一球就果斷出棒！右外野落地，比賽結束！你如何收尾這場激戰？',
   roleBonus: { 'v1': { optType: 'C', bonus: { fans: 2500, speaking: 8 } }, 'v7': { optType: 'A', bonus: { term: 8, speaking: 5 } } },
   options: [
     {
@@ -314,7 +313,7 @@ const QUESTION_POOL = [
       social: { fans: 2200 }
     },
     {
-      text: '「打出去了！擋不住！氣勢徹底碾壓對手！這就是超級球星的致命一擊！太帥啦！」',
+      text: '「打出去了，發揮球星的價值，打出致命一擊！太帥啦！」',
       type: 'B',
       effect: { speaking: 10, reflex: 12, data: -8, term: -8, tension: -6 },
       social: { fans: 4000 }
@@ -328,27 +327,27 @@ const QUESTION_POOL = [
   ]
 },
 
-// ── 準決賽 ──
 {
   id: 'q_semi1', phase: '準決賽',
   label: '7局上・支持的球隊一吐怨氣大逆轉',
-  q: '你私下支持的球隊苦戰整場，終於在第七局擊出關鍵適時安打逆轉比分！面對全場沸騰，你如何兼顧專業？',
+  img: 'assets/q3.png',
+  q: '你私下支持的球隊苦戰整場，終於在第九局擊出關鍵再見安打！面對全場沸騰，你如何兼顧專業？',
   roleBonus: { 'v6': { optType: 'C', bonus: { fans: 3000, speaking: 10 } }, 'v9': { optType: 'A', bonus: { speaking: 8, term: 8 } } },
   options: [
     {
-      text: '「推向反方向！落地形成帶有兩分打點的安打」',
+      text: '「推向反方向！落地形成安打，三壘跑者回來本壘得分，比賽結束」',
       type: 'A',
       effect: { speaking: 8, reflex: 6, data: 8, term: 12, tension: 10 },
       social: { fans: 2000 }
     },
     {
-      text: '「打穿啦！太爽啦！悶了整整六局這口氣總算吐出來！逆轉啦！」',
+      text: '「打穿啦！太爽了，再見安打，得點圈之鬼的稱號不是假的」',
       type: 'B',
       effect: { speaking: 6, reflex: 12, data: -10, term: -15, tension: -12 },
       social: { fans: 4500 }
     },
     {
-      text: '「他今晚手感發燙！抓到他最擅長攻擊的球種作攻擊」',
+      text: '「選擇正面對決，兩個男子漢之間的對決看了真過癮」',
       type: 'C',
       effect: { speaking: 8, reflex: 4, data: -15, term: -10, tension: 6 },
       social: { fans: 1200 }
@@ -358,24 +357,25 @@ const QUESTION_POOL = [
 
 {
   id: 'q_semi2', phase: '準決賽',
-  label: '8局下・申皓瑋關鍵安打打破鴨蛋',
-  q: '8局下富邦悍將發動反攻，第7棒申皓瑋敲出右外野帶有打點的安打，打破零封局面！比數來到 1:2，比賽還有懸念，你如何帶起氣氛？',
+  label: '8局下・大寶寶關鍵安打打破鴨蛋',
+  img: 'assets/q4.png',
+  q: '第3棒大寶寶敲出中外野全壘打，打破鴨蛋，你如何帶起氣氛？',
   roleBonus: { 'v18': { optType: 'A', bonus: { tension: 8, reflex: 5 } }, 'v32': { optType: 'C', bonus: { fans: 2500, speaking: 8 } } },
   options: [
     {
-      text: '「頂住兩好球壓力！右外野方向落地安打！三壘跑者范國宸回本壘得分！富邦成功破蛋，將分差縮小到一分差距！」',
+      text: '「謹慎選球，大寶寶鎖定直球攻擊，一棒三分！成功破蛋！」',
       type: 'A',
       effect: { speaking: 8, reflex: 8, data: 8, term: 10, tension: 8 },
       social: { fans: 2500 }
     },
     {
-      text: '「終於破蛋了！等了整整八局！投手要小心，對手的反攻號角吹響啦！」',
+      text: '「終於破蛋了！反攻號角吹響，大寶寶即時的三分球」',
       type: 'B',
-      effect: { speaking: 8, reflex: 10, data: -8, term: -8, tension: -8 },
+      effect: { speaking: 4, reflex: 10, data: -8, term: -8, tension: -8 },
       social: { fans: 3500 }
     },
     {
-      text: '「我就說悍將第八局必定追分！大逆轉好戲才正要開始！」',
+      text: '「我就說這局必定追分！得點圈有人的局面你一定要怕他」',
       type: 'C',
       effect: { speaking: 8, reflex: 4, data: -14, term: -10, tension: 8 },
       social: { fans: 1600 }
@@ -386,46 +386,47 @@ const QUESTION_POOL = [
 // ── 決賽（冠軍爭奪）──
 {
   id: 'q_fin1', phase: '決賽',
-  label: '10局延長・李勛傑再見安打封王戰',
-  q: '十局延長賽滿壘、兩出局！李勛傑鎖定偏高直球第一球揮擊——球飛越內野防線！這是決定年度冠軍的瞬間，你的終極播報是？',
+  label: '10局延長・再見安打封王戰',
+  q: '十局延長賽滿壘、兩出局！贏了就得到季後賽資格，終結者李大號投出偏高直球，送給對手再見三振，這是決定性的瞬間，你的播報是？',
   roleBonus: { 'v30': { optType: 'A', bonus: { speaking: 10, term: 5 } }, 'v7': { optType: 'A', bonus: { speaking: 8, term: 8 } } },
   options: [
     {
-      text: '「抓第一球！中外野方向落地安打！三壘跑者奔回本壘！比賽結束！李勛傑一棒定江山，幫助球隊拿下今晚勝利！」',
+      text: '「High Fasrball，成功用球速壓制打者，比賽結束！大號成功完成終結者工作，幫助球隊拿下季後賽門票！」',
       type: 'A',
-      effect: { speaking: 10, reflex: 10, data: 8, term: 14, tension: 12 },
+      effect: { speaking: 8, reflex: 8, data: 8, term: 2, tension: 12 },
       social: { fans: 5000 }
     },
     {
-      text: '「打出去了！落地啦贏啦！再見安打！他是今晚的超級大英雄！全場瘋狂慶祝！」',
+      text: '「這球~~三振出局，再見三振，他將全隊帶進了季後賽，這是值得瘋狂慶祝的時候！」',
       type: 'B',
       effect: { speaking: 10, reflex: 14, data: -6, term: -10, tension: -8 },
-      social: { fans: 6000 }
+      social: { fans: 3000 }
     },
     {
-      text: '「神預言！這記再見安打完全在我意料之中！」',
+      text: '「這個配球策略奏效，再見三振完全在我意料之中，可以相信投捕一定做了很多準備，恭喜他們」',
       type: 'C',
-      effect: { speaking: 5, reflex: 4, data: -16, term: -10, tension: 10 },
+      effect: { speaking: 5, reflex: 4, data: 6, term: -2, tension: 10 },
       social: { fans: 2500 }
     }
   ]
 },
 
 { id: 'q_fin2', phase: '決賽',
-  label: '8局下・梁家榮中線安打追平戰局',
-  q: '八局下，兩出局二三壘有人，梁家榮沉穩鎖定低球推往中線穿越！四比四，你如何播報這個讓全場沸騰的關鍵追平？',
+  label: '8局下・錯失得分機會，中心棒次打出雙殺打中斷攻勢',
+  img: 'assets/q5.png',
+  q: '有機會追平比數的大好局面，卻因中心棒次敲出雙殺打而中斷攻勢，面對這個關鍵時刻，你會如何播報？',
   roleBonus: { 'v9': { optType: 'A', bonus: { speaking: 8, term: 8 } }, 'v36': { optType: 'C', bonus: { fans: 3000, speaking: 10 } } },
   options: [
     {
-      text: '「抓低球打穿越中間防線帶有兩分打點！梁家榮展現價值！四比四！比賽回到原點！」',
+      text: '「抓低球打，剛好在游擊手正面，形成了雙殺，留下殘壘，可惜沒有得分！」',
       type: 'A',
-      effect: { speaking: 10, reflex: 8, data: 8, term: 12, tension: 10 },
+      effect: { speaking: 8, reflex: 8, data: 8, term: 12, tension: 10 },
       social: { fans: 4500 }   },
-    { text: '「追平啦！棒球最刺激的時刻就是現在，心臟快受不了！」',
+    { text: '「非常可惜，得分的大好局面就這樣中斷了，心臟快受不了！」',
       type: 'B',
       effect: { speaking: 8, reflex: 10, data: -8, term: -8, tension: -8 },
       social: { fans: 5500 }    },
-    {     text: '「我就說阿銀這棒必定建功！完全命中追平劇本！接下來等我預測再見轟！」',
+    {     text: '「我就說投手一定希望製造滾地球，果然成功執行！」',
       type: 'C',
       effect: { speaking: 8, reflex: 4, data: -14, term: -10, tension: 8 },
       social: { fans: 2200 }  }
@@ -433,19 +434,19 @@ const QUESTION_POOL = [
 },
 {
   id: 'q_fin3', phase: '決賽',
-  label: '滿球數生死對決・朱迦恩逆轉安打',
-  q: '九局下兩好三壞滿球數，朱迦恩果斷推打出右外野穿越安打送回兩分，完成不可思議的大逆轉！面對這記安打，你如何收尾？',
+  label: '滿球數生死對決・朱恩逆轉安打',
+  q: '九局下兩好三壞滿球數，朱恩果斷推打出右外野穿越安打送回兩分，完成不可思議的大逆轉！面對這記安打，你如何收尾？',
   roleBonus: { 'v32': { optType: 'C', bonus: { fans: 3500, speaking: 10 } }, 'v25': { optType: 'A', bonus: { speaking: 8, term: 8 } } },
   options: [
-    { text: '「滿球數果斷出棒！穿越內野防線！兩分打點！統一獅完成逆轉！朱迦恩！今晚的救世主！」',
+    { text: '「滿球數果斷出棒！穿越內野防線！兩分打點！完成逆轉！朱恩！今晚的救世主！」',
       type: 'A',
       effect: { speaking: 10, reflex: 10, data: 8, term: 12, tension: 12 },
       social: { fans: 5000 }   },
-    { text: '「逆轉啦！兩分打點！太扯啦！牛棚完全壓不住，救援失敗，完全擋不住的奇蹟夜！」',
+    { text: '「逆轉啦！牛棚完全壓不住，救援失敗，完全擋不住的奇蹟夜！」',
       type: 'B',
       effect: { speaking: 8, reflex: 14, data: -8, term: -10, tension: -8 },
       social: { fans: 6000 }   },
-    { text: '「逆轉大奇蹟完全被我算中！朱迦恩今晚就是超級英雄，完全按照我的預言走！」',
+    { text: '「逆轉大奇蹟完全被我算中！朱恩今晚就是超級英雄，完全按照我的預言走！」',
       type: 'C',
       effect: { speaking: 8, reflex: 4, data: -16, term: -10, tension: 10 },
       social: { fans: 2500 }   }
@@ -486,7 +487,7 @@ const SPECIAL_POOL = [
  roleBonus:{'v7':{optType:'A',bonus:{tension:10,speaking:5}},'v12':{optType:'C',bonus:{fans:3000,speaking:8}}},
  options:[
   {text:'逐一回覆每一則評論為自己辯護，越陷越深。',type:'B',effect:{speaking:-5,tension:-25,reflex:-10},social:{ptt:600,fans:-4000}},
-  {text:'開啟留言過濾，專注在真心支持你的粉絲身上。',type:'A',effect:{speaking:8,tension:20,reflex:5},social:{ptt:100,fans:3500}},
+  {text:'開啟留言過濾，專注在真心支持你的粉絲身上。',type:'A',effect:{speaking:-3,tension:20,reflex:5},social:{ptt:100,fans:3500}},
   {text:'直接把帳號設為私人，消失三天後回來。',type:'C',effect:{speaking:-3,tension:12,reflex:8},social:{ptt:150,fans:-500}}
 ]},
 
@@ -518,7 +519,7 @@ const SPECIAL_POOL = [
 ]},
 
 {id:'s23',label:'突發狀況：被嫌播報無聊',isEvent:true,
- q:'直播進行中，你看到彈幕洗版「這個播報怎麼這麼無聊」「換人換人」，而且越來越多，你怎麼應對？',
+ q:'直播進行中，你看到彈幕洗版「這個播報怎麼這麼無聊」「我來也行」，而且越來越多，你怎麼應對？',
  roleBonus:{'v6':{optType:'B',bonus:{fans:3500,speaking:8}},'v11':{optType:'B',bonus:{fans:3000,speaking:5}}},
  options:[
   {text:'在直播中直接說：「有些人覺得我無聊，那我表演一下怎樣叫有趣。」開始誇張模仿搞笑播報。',type:'B',effect:{speaking:8,reflex:5,tension:-15,term:-12},social:{ptt:400,fans:3000}},
@@ -529,66 +530,75 @@ const SPECIAL_POOL = [
 ];
 
 const ENDINGS = [
-  {id:'tragic_hero',
-   condition: s => s.wasRevived && s.fans >= 6000,
-   rank:'🔥', titleClass:'tragic',
-   title:    name => name + ' ── 浴火重生的悲劇英雄',
-   subtitle: (name,seed,role,mentor) =>
-     '帶著種子碼 ' + seed + ' 闖關，曾在中途遭遇崩潰淘汰，卻展現了無與倫比的韌性。' +
-     mentor.icon + ' ' + mentor.name + '對你讚不絕口：「這種逆境中的爆發力，是無法靠訓練得來的。」'},
+  {
+    id: 'rebel_champion',
+    condition: s => s.ranking === 1 && (mentorScore[selectedMentor] || 50) < 70,
+    rank: '👑', titleClass: '',
+    title: name => name + ' ── 傲骨異端！強勢登頂的無冕狀元',
+    subtitle: (name, seed, role, mentor) =>
+      '種子碼 ' + seed + ' 結算！雖然你的播報風格始終無法完全迎合 ' + mentor.name + ' 導師的嚴苛標準（僅得 ' + (mentorScore[selectedMentor] || 50) + ' 分），但你用絕對的臨場爆發力與強大個人氣場碾壓全場對手，強勢奪冠！製作人與高層力排眾議決定為你量身打造專屬節目！'
+  },
+  {
+    id: 'champion',
+    condition: s => s.ranking === 1 && (mentorScore[selectedMentor] || 50) >= 70,
+    rank: '🏆', titleClass: '',
+    title: name => name + ' ── DAZN 官方認證正式簽約主播！',
+    subtitle: (name, seed, role, mentor) =>
+      '種子碼 ' + seed + ' 挑戰成功！你不僅五角戰力登頂拿下全場第一，更深深折服了 ' + mentor.name + ' 導師，獲得了最高級別的認可！' +
+      mentor.icon + ' ' + mentor.name + ' 在講評台上起立鼓掌：「這毫無疑問就是我要的主播！」'
+  },
 
-{id:'champion',
- condition: s => {
-   const avg    = s.total / STAT_KEYS.length;
-   const hasAce = STAT_KEYS.some(k => s.statValues[k] >= 93);
-   return avg >= 93 && hasAce && s.fans >= 8321 && s.ptt >= 500 && s.ranking <= 3;
- },
- rank:'🏆', titleClass:'',
- title:    name => name + ' ── DAZN 正式簽約主播！',
- subtitle: (name,seed,role,mentor) =>
-   '種子碼 ' + seed + ' 挑戰成功！你均衡發展五角戰力，並在某項能力達到頂尖水準，在輿論場與專業考驗中全面制霸，排名衝入前三。' +
-   mentor.icon + ' ' + mentor.name + '第一個站起來鼓掌：「這就是我要的主播！」'},
+  // 🔥 逆境傳奇結局：【浴火重生的傳奇英雄】（中途淘汰過，但復活逆轉奪冠）
+  {
+    id: 'tragic_hero',
+    condition: s => s.wasRevived && s.ranking <= 3,
+    rank: '🔥', titleClass: 'tragic',
+    title: name => name + ' ── 浴火重生的傳奇英雄',
+    subtitle: (name, seed, role, mentor) =>
+      '帶著種子碼 ' + seed + ' 闖關，身處逆境曾遭遇淘汰的你，在復活後展現了不可思議的堅韌鬥志，強勢殺回前三名！' +
+      mentor.icon + ' ' + mentor.name + ' 讚嘆：「這種在懸崖邊緣爆發的心理素質，是任何訓練都教不出來的。」'
+  },
 
-  {id:'runner_up',
-   condition: s => s.total >= 280 && s.fans >= 6000
-                && STAT_KEYS.every(k => s.statValues[k] >= 40)
-                && s.ranking <= 5,
-   rank:'🥈', titleClass:'',
-   title:    name => name + ' ── 準簽約候補主播',
-   subtitle: (name,seed,role,mentor) =>
-     '你的表現非常亮眼，排名穩定維持前五。' +
-     mentor.icon + ' ' + mentor.name + '私下告訴製作人：「如果首選因故無法出賽，第一個考慮的就是這位。」種子碼：' + seed},
+  // 🥈 排名 2 ~ 3 名：【準簽約候補主播】
+  {
+    id: 'runner_up',
+    condition: s => s.ranking <= 3,
+    rank: '🥈', titleClass: '',
+    title: name => name + ' ── 準簽約候補主播',
+    subtitle: (name, seed, role, mentor) =>
+      '你在這場頂級選秀中穩定發揮，最終高居全場第 ' + s.ranking + ' 名。' +
+      mentor.icon + ' ' + mentor.name + ' 私下告訴製作團隊：「實力非常出色，如果首選因故無法出賽，第一個簽的就是他。」（種子碼：' + seed + '）'
+  },
 
-  {id:'specialist',
-   condition: s => s.total >= 270 && !STAT_KEYS.every(k => s.statValues[k] >= 40),
-   rank:'🎯', titleClass:'',
-   title:    name => name + ' ── 偏科達人，潛力未完全開發',
-   subtitle: (name,seed,role,mentor) =>
-     '你在某些領域表現驚豔，但五角戰力失衡讓評審認為你尚未準備好。' +
-     mentor.icon + ' ' + mentor.name + '說：「專長很突出，但要成為合格主播，均衡才是關鍵。」（種子碼：' + seed + '）'},
+  // 🎯 排名 4 ~ 6 名：【潛力新秀主播】
+  {
+    id: 'trainee',
+    condition: s => s.ranking <= 6,
+    rank: '🌟', titleClass: '',
+    title: name => name + ' ── 官方潛力培訓主播',
+    subtitle: (name, seed, role, mentor) =>
+      '經歷這場殘酷的選秀洗禮（種子碼 ' + seed + '），你展現了極佳的可塑性，成功入選二軍培訓名單。' +
+      mentor.icon + ' ' + mentor.name + '：「底子不錯，給我半年，我有信心把你雕琢成一線主播。」'
+  },
 
-  {id:'trainee',
-   condition: s => s.total >= 220 && s.fans >= 3000
-                && STAT_KEYS.every(k => s.statValues[k] >= 35),
-   rank:'🌟', titleClass:'',
-   title:    name => name + ' ── 官方潛力培訓主播',
-   subtitle: (name,seed,role,mentor) =>
-     '經歷這場選秀洗禮（種子碼 ' + seed + '），你展現出均衡潛質。' +
-     mentor.icon + ' ' + mentor.name + '點名將你列入培訓名單：「給我半年，我有把握把你練出來。」'},
+  // 📱 話題型主播：粉絲極高，但戰力排名偏後
+  {
+    id: 'internet_star',
+    condition: s => s.fans >= 6000,
+    rank: '📱', titleClass: '',
+    title: name => name + ' ── 網路話題焦點主播',
+    subtitle: (name, seed, role, mentor) =>
+      '你在社群上掀起了驚人的討論狂潮（種子碼 ' + seed + '），粉絲聲量無人能敵！但 ' +
+      mentor.icon + ' ' + mentor.name + ' 提醒：「人氣是一時的，要把專業基本功練紮實，才能在主播台長久站穩。」'
+  },
 
-  {id:'internet_star',
-   condition: s => s.fans >= 8000 && !STAT_KEYS.every(k => s.statValues[k] >= 35),
-   rank:'📱', titleClass:'',
-   title:    name => name + ' ── 爭議性話題網紅主播',
-   subtitle: (name,seed,role,mentor) =>
-     '你在網路上擁有極高聲量，但' +
-     mentor.icon + ' ' + mentor.name + '搖頭：「人氣不等於實力，失衡的問題不解決，上了播報台遲早翻車。」（種子碼：' + seed + '）'},
-
-  {id:'failed',
-   condition: () => true,
-   rank:'🌱', titleClass:'',
-   title:    name => name + ' ── 未能及格的播報挑戰者',
-   subtitle: (name,seed,role,mentor) =>
-     '實境秀的殘酷在於它篩選掉不適合的人。' +
-     mentor.icon + ' ' + mentor.name + '留下一句話：「這次沒過沒關係，但你需要從頭審視自己想要什麼。」（種子碼：' + seed + '）'}
+  {
+    id: 'failed',
+    condition: () => true,
+    rank: '🌱', titleClass: '',
+    title: name => name + ' ── 未能及格的播報挑戰者',
+    subtitle: (name, seed, role, mentor) =>
+      '實境秀的殘酷在於它只留下準備好的人。' +
+      mentor.icon + ' ' + mentor.name + ' 留下最後勉勵：「這次失利不是終點，回去把基本功重新練好再來挑戰。」（種子碼：' + seed + '）'
+  }
 ];

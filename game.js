@@ -1008,7 +1008,7 @@ function renderCardOverlay(ctx, canvas) {
   }, 200);
 
   setTimeout(() => {
-    alert('📸 官方認證戰績卡已成功下載！\n\n快上傳到 IG 限時動態炫耀吧！🔥');
+    alert('📸 官方認證戰績卡已成功下載！\n\n快分享給朋友吧！🔥');
   }, 600);
 }
 
@@ -1019,7 +1019,7 @@ function drawStatBox(ctx, x, y, w, h, label, value, color) {
   ctx.lineWidth = 2;
   ctx.strokeRect(x, y, w, h);
 
-  ctx.fillStyle = '#94a3b8';
+  ctx.fillStyle = '#a9bdd8';
   ctx.font = '18px sans-serif';
   ctx.fillText(label, x + 20, y + 35);
 
