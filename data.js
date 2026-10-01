@@ -94,7 +94,7 @@ function seedToNum(seed) {
   return n;
 }
 
-// ═══ NPC 生成（強中弱分段，讓玩家平均落在 5–8 名）═══
+// ═══ NPC 生成（前三名強化，增加選秀競爭感）═══
 function generateNPCs(playerVariant, seed) {
   const n           = seedToNum(seed);
   const npcNames    = ['林予涵','陸柏宇','張志豪','方宇翔','趙苡寧','陳冠廷','蘇彥廷','葉芷涵','鄭宇軒'];
@@ -102,18 +102,19 @@ function generateNPCs(playerVariant, seed) {
   return npcNames.map((name, i) => {
     let base;
     if (i < 3) {
-      // 強者：總分 340–400（玩家初始約 240–280，強者遠超）
-      base = 380 + ((n * (i + 1) * 37) % 81);
+      // 👑 前三名選秀大物：總分 430 ~ 485（玩家需要全力以赴才能超越）
+      base = 390 + ((n * (i + 1) * 37) % 56);
     } else if (i < 7) {
-      // 中等：總分 280–340
-      base = 300 + ((n * (i + 1) * 29) % 81);
+      // ⚖️ 中段班實力派：總分 340 ~ 420
+      base = 340 + ((n * (i + 1) * 29) % 81);
     } else {
-      // 弱者：總分 200–260
-      base = 180 + ((n * (i + 1) * 23) % 81);
+      // 🌱 後段班新秀：總分 260 ~ 330
+      base = 245+ ((n * (i + 1) * 23) % 71);
     }
     return { name, total: base, base };
   });
 }
+
 
 // NPC 每關微幅浮動（±8）
 function fluctuateNPCs(npcs, seed, stageIdx) {

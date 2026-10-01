@@ -98,6 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const introEl = document.getElementById('intro-screen');
   if (introEl) introEl.classList.remove('active');
 
+  const closeBtn = document.getElementById('card-modal-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      document.getElementById('card-modal-overlay').style.display = 'none';
+    });
+  }
+
   currentSeed = generateSeed();
   const seedInputEl = document.getElementById('seed-input');
   if (seedInputEl) {
@@ -209,9 +216,13 @@ function pickQuestions(seed) {
 
   const pre  = seedShuffle(prePool, 1).slice(0, 2);
   const semi = seedShuffle(semiPool, 2).slice(0, 2);
-  const fin  = seedShuffle(finPool, 3).slice(0, 1);
+
+  const finIndex = (n * 17 + 5) % finPool.length;
+  const fin = [finPool[finIndex]];
+
   return [...pre, ...semi, ...fin];
 }
+
 
 function pickSpecials(seed) {
   const n    = seedToNum(seed);
@@ -235,8 +246,11 @@ function getTimer(stage) {
 
 function calcRanking() {
   const statSum = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
-  const mentorPts = (mentorScore[selectedMentor] || 50) * 1.5;
-  const playerFinalScore = statSum + mentorPts;
+  const mentorScoreVal = mentorScore[selectedMentor] || 50;
+  
+  const mentorBonus = (mentorScoreVal - 50) * 2.0; 
+  const playerFinalScore = statSum + mentorBonus;
+
   return npcs.filter(n => n.total > playerFinalScore).length + 1;
 }
 
@@ -270,7 +284,7 @@ function calcMentorDelta(optType) {
   mentor.likes.forEach(k    => { if (stats[k] >= 60) delta += 3; });
   mentor.dislikes.forEach(k => { if (stats[k] >= 70) delta -= 2; });
   if (optType === mentor.optBonus)   delta += 3;
-  if (optType === mentor.optPenalty) delta -= 8;
+  if (optType === mentor.optPenalty) delta -= 3;
   return delta;
 }
 
@@ -639,7 +653,7 @@ function applyEffect(eff, social, optType, mult = 1) {
   const currentMentorScore = mentorScore[selectedMentor] || 50;
 
   const isSkillCollapsed = zeroCount >= 2 || totalStats < 160;
-  const isMentorFired = zeroCount >= 1 && currentMentorScore < 40;
+  const isMentorFired = zeroCount >= 2 && currentMentorScore < 35;
 
   if (isSkillCollapsed || isMentorFired) {
     pendingElim = true;
@@ -966,12 +980,25 @@ function renderCardOverlay(ctx, canvas) {
   ctx.fillText('【 生涯稱號與榮譽 】', 100, 1070);
 
   const badges = [];
+  
+  // 榮譽 1：選秀狀元
   if (rank === 1) badges.push('👑 選秀狀元');
-  if (stats.speaking >= 80) badges.push('🎙 金嗓主播');
-  if (stats.data >= 80) badges.push('📊 數據魔人');
-  if (fans >= 5000) badges.push('✨ 人氣巨星');
+  // 榮譽 2：專業數據魔人
+  if (stats.data >= 85) badges.push('📊 人形計算機');
+  // 榮譽 3：金嗓流暢主播
+  if (stats.speaking >= 85) badges.push('🎙 金嗓主播');
+  // 榮譽 4：臨場神反應
+  if (stats.reflex >= 85) badges.push('⚡ 光速神反應');
+  // 榮譽 5：抗壓怪物
+  if (stats.tension >= 85) badges.push('🛡 鋼鐵心臟');
+  // 榮譽 6：綜藝咖（常選 C 選項）
+  if (styleCounter.C >= 3) badges.push('🎯 劇本神預言家');
+  // 榮譽 7：激情大吼派（常選 B 選項）
+  if (styleCounter.B >= 3) badges.push('🔥 燃燒靈魂派');
+  // 榮譽 8：人氣巨星
+  if (fans >= 5000) badges.push('✨ 流量密碼');
+  // 榮譽 9：浴火重生
   if (wasRevived) badges.push('🔥 浴火重生');
-  if (badges.length === 0) badges.push('🌱 潛力新秀');
 
   let badgeX = 100;
   let badgeY = 1115;
@@ -998,20 +1025,27 @@ function renderCardOverlay(ctx, canvas) {
   ctx.font = '18px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('種子碼: ' + currentSeed + '  |  THE ANNOUNCER 官方認證戰績卡', canvas.width / 2, 1240);
+// 🖼️ 將生成的 Canvas 轉為圖片並放進預覽視窗
+  const dataUrl = canvas.toDataURL('B1/png');
+  const modal = document.getElementById('card-modal-overlay');
+  const previewImg = document.getElementById('card-preview-img');
+  const confirmBtn = document.getElementById('card-download-confirm-btn');
 
-  // 延遲觸發下載，確保所有圖層繪製完畢
-  setTimeout(() => {
-    const link = document.createElement('a');
-    link.download = playerName + '_主播戰績卡.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  }, 200);
+  if (modal && previewImg) {
+    previewImg.src = dataUrl;
+    modal.style.display = 'flex'; // 打開彈窗！
 
-  setTimeout(() => {
-    alert('📸 官方認證戰績卡已成功下載！\n\n快分享給朋友吧！🔥');
-  }, 600);
-}
-
+    // 點擊確認按鈕時才真正執行下載
+    if (confirmBtn) {
+      confirmBtn.onclick = () => {
+        const link = document.createElement('a');
+        link.download = playerName + '_主播戰績卡.png';
+        link.href = dataUrl;
+        link.click();
+      };
+    }
+  }
+  
 function drawStatBox(ctx, x, y, w, h, label, value, color) {
   ctx.fillStyle = '#181c24';
   ctx.fillRect(x, y, w, h);
@@ -1030,4 +1064,5 @@ function drawStatBox(ctx, x, y, w, h, label, value, color) {
 // 🔢 數字格式化工具（將大數字轉為「萬」）
 function formatNum(n) {
   return n >= 10000 ? (n / 10000).toFixed(1) + '萬' : n.toLocaleString();
+}
 }
