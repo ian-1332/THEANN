@@ -5,9 +5,9 @@ const STAT_NAMES = {speaking:'口條', reflex:'臨場', data:'數據', term:'術
 
 // ═══ 難度對應（依關卡階段，不依字數）═══
 function getTimerByDifficulty(phase) {
-  if (phase === '預賽')   return { seconds: 25, label: '簡單', cls: 'diff-easy',   mult: 1.0 };
+  if (phase === '預賽')   return { seconds: 20, label: '簡單', cls: 'diff-easy',   mult: 1.0 };
   if (phase === '準決賽') return { seconds: 18, label: '進階', cls: 'diff-normal', mult: 1.2 };
-  if (phase === '決賽')   return { seconds: 10, label: '困難', cls: 'diff-hard',   mult: 1.5 };
+  if (phase === '決賽')   return { seconds: 7, label: '困難', cls: 'diff-hard',   mult: 1.5 };
   return                          { seconds: 15, label: '普通', cls: 'diff-normal', mult: 1.0 };
 }
 // ═══ 三位導師定義 ═══
@@ -19,25 +19,25 @@ const MENTORS = {
     dislikes:   ['speaking'],
     optBonus:   'A',
     optPenalty: 'B',
-    initBonus:  { data: -5, term: 10, speaking: -5 }
+    initBonus:  { data: 3, term: 3, speaking: -2 }
   },
   dapangge: {
     id: 'dapangge', name: '小石', icon: '📚',
     title: '歷史資料庫導師',
     likes:      ['data', 'term', 'reflex'],
     dislikes:   ['tension'],
-    optBonus:   'A',
-    optPenalty: 'B',
-    initBonus:  { data: 8, term: 8, reflex: 5, tension: -5 }
+    optBonus:   'B',
+    optPenalty: 'C',
+    initBonus:  { data: 2, term: 3, reflex: 3, tension: -5 }
   },
   ningning: {
-    id: 'ningning', name: '吉賽兒', icon: '👾',
+    id: 'ningning', name: '卡寶', icon: '👾',
     title: '節奏流導師',
     likes:      ['speaking', 'reflex', 'tension'],
     dislikes:   ['data'],
-    optBonus:   'A',
+    optBonus:   'A,B',
     optPenalty: 'C',
-    initBonus:  { speaking: 10, reflex: 5, tension: 8, data: -8 }
+    initBonus:  { speaking: 1, reflex: 5, tension: -2, data: -2 }
   }
 };
 
@@ -295,7 +295,7 @@ const QUESTION_POOL = [
     {
       text: '「打破僵局！我就說可怕今晚眼神不一樣，完全照著我的預測走，繼續期待接下來的進攻！」',
       type: 'C',
-      effect: { speaking: 8, reflex: 4, data: -12, term: -8, tension: 6 },
+      effect: { speaking: 8, reflex: 4, data: -3, term: -8, tension: 6 },
       social: { fans: 1200 }
     }
   ]
@@ -316,7 +316,7 @@ const QUESTION_POOL = [
     {
       text: '「打出去了，發揮球星的價值，打出致命一擊！太帥啦！」',
       type: 'B',
-      effect: { speaking: 10, reflex: 12, data: -8, term: -8, tension: -6 },
+      effect: { speaking: 10, reflex: 12, data: -8,tension: -6 },
       social: { fans: 4000 }
     },
     {
@@ -344,13 +344,13 @@ const QUESTION_POOL = [
     {
       text: '「打穿啦！太爽了，再見安打，得點圈之鬼的稱號不是假的」',
       type: 'B',
-      effect: { speaking: 6, reflex: 12, data: -10, term: -15, tension: -12 },
+      effect: { speaking: 6, reflex: 12, data: -10, term: -10, tension: -12 },
       social: { fans: 4500 }
     },
     {
       text: '「選擇正面對決，兩個男子漢之間的對決看了真過癮」',
       type: 'C',
-      effect: { speaking: 8, reflex: 4, data: -15, term: -10, tension: 6 },
+      effect: { speaking: 8, reflex: 4, data: -5, term: -10, tension: 6 },
       social: { fans: 1200 }
     }
   ]
@@ -372,13 +372,13 @@ const QUESTION_POOL = [
     {
       text: '「終於破蛋了！反攻號角吹響，大寶寶即時的三分球」',
       type: 'B',
-      effect: { speaking: 4, reflex: 10, data: -8, term: -8, tension: -8 },
+      effect: { speaking: 4, reflex: 8, data: -8, term: -8, tension: -8 },
       social: { fans: 3500 }
     },
     {
       text: '「我就說這局必定追分！得點圈有人的局面你一定要怕他」',
       type: 'C',
-      effect: { speaking: 8, reflex: 4, data: -14, term: -10, tension: 8 },
+      effect: { speaking: 8, reflex: 4, data: -6, term: -5, tension: 8 },
       social: { fans: 1600 }
     }
   ]
@@ -394,13 +394,13 @@ const QUESTION_POOL = [
     {
       text: '「High Fasrball，成功用球速壓制打者，比賽結束！大號成功完成終結者工作，幫助球隊拿下季後賽門票！」',
       type: 'A',
-      effect: { speaking: 8, reflex: 8, data: 8, term: 2, tension: 12 },
+      effect: { speaking: 8, reflex: 8, data: 8, term: 2, tension: 2 },
       social: { fans: 5000 }
     },
     {
       text: '「這球~~三振出局，再見三振，他將全隊帶進了季後賽，這是值得瘋狂慶祝的時候！」',
       type: 'B',
-      effect: { speaking: 10, reflex: 14, data: -6, term: -10, tension: -8 },
+      effect: { speaking: 8, reflex: 4, data: -6, term: -10, tension: -8 },
       social: { fans: 3000 }
     },
     {
@@ -421,15 +421,15 @@ const QUESTION_POOL = [
     {
       text: '「抓低球打，剛好在游擊手正面，形成了雙殺，留下殘壘，可惜沒有得分！」',
       type: 'A',
-      effect: { speaking: 8, reflex: 8, data: 8, term: 12, tension: 10 },
+      effect: { speaking: 8, reflex: 8,  term: 12, tension: 10 },
       social: { fans: 4500 }   },
     { text: '「非常可惜，得分的大好局面就這樣中斷了，心臟快受不了！」',
       type: 'B',
-      effect: { speaking: 8, reflex: 10, data: -8, term: -8, tension: -8 },
+      effect: { speaking: 8, reflex: 10, data: -2, term: -8, tension: -8 },
       social: { fans: 5500 }    },
     {     text: '「我就說投手一定希望製造滾地球，果然成功執行！」',
       type: 'C',
-      effect: { speaking: 8, reflex: 4, data: -14, term: -10, tension: 8 },
+      effect: { speaking: 8, reflex: 4, data: -5, term: -5, tension: 8 },
       social: { fans: 2200 }  }
   ]
 },
@@ -441,15 +441,15 @@ const QUESTION_POOL = [
   options: [
     { text: '「滿球數果斷出棒！穿越內野防線！兩分打點！完成逆轉！朱恩！今晚的救世主！」',
       type: 'A',
-      effect: { speaking: 10, reflex: 10, data: 8, term: 12, tension: 12 },
+      effect: { speaking: 5, reflex: 10,term: 12, tension: 2 },
       social: { fans: 5000 }   },
     { text: '「逆轉啦！牛棚完全壓不住，救援失敗，完全擋不住的奇蹟夜！」',
       type: 'B',
-      effect: { speaking: 8, reflex: 14, data: -8, term: -10, tension: -8 },
+      effect: { speaking: 8, reflex: 4, data: -8, term: -5, tension: -8 },
       social: { fans: 6000 }   },
     { text: '「逆轉大奇蹟完全被我算中！朱恩今晚就是超級英雄，完全按照我的預言走！」',
       type: 'C',
-      effect: { speaking: 8, reflex: 4, data: -16, term: -10, tension: 10 },
+      effect: { speaking: 8, reflex: 4, data: -6, term: -1, tension: 5 },
       social: { fans: 2500 }   }
   ]
 }
@@ -462,16 +462,16 @@ const SPECIAL_POOL = [
  options:[
   {text:'冷笑回擊：「管好自己的動態截圖吧，別等下被酸民罵翻。」',type:'B',effect:{speaking:8,reflex:5,tension:-12},social:{ptt:180,fans:-800}},
   {text:'微笑帶過：「謝謝提醒，我們場上用實力說話。」',type:'A',effect:{speaking:5,reflex:8,data:5,term:5,tension:12},social:{ptt:40,fans:1200}},
-  {text:'緊張得說不出話，默默走開。',type:'C',effect:{speaking:-8,tension:-10,reflex:5},social:{ptt:20,fans:300}}
+  {text:'緊張得說不出話，默默走開。',type:'C',effect:{speaking:-8,tension:-1,reflex:5},social:{ptt:20,fans:300}}
 ]},
 
 {id:'s02',label:'場外事件：前輩的施壓',isEvent:true,
  q:'前球星路過你的座位，看了一眼你的戰術筆記冷冷說：「這種記法太外行了。」你選擇？',
  roleBonus:{'v12':{optType:'B',bonus:{fans:2000,speaking:8}},'v7':{optType:'A',bonus:{data:8,term:8}}},
  options:[
-  {text:'不服氣回嗆：「不然你來教我啊？」',type:'B',effect:{speaking:10,reflex:-8,tension:-15},social:{ptt:150,fans:-1200}},
-  {text:'虛心請教：「前輩覺得哪裡可以修正？懇請指教。」',type:'A',effect:{data:12,term:12,tension:10,speaking:3},social:{ptt:50,fans:1800}},
-  {text:'大翻白眼🤷‍♂️🤷‍♀️😉',type:'C',effect:{tension:5,speaking:3,data:-5},social:{ptt:10,fans:200}}
+  {text:'不服氣回嗆：「不然你來教我啊？」',type:'B',effect:{speaking:1,reflex:-8,tension:5},social:{ptt:150,fans:-67}},
+  {text:'虛心請教：「前輩覺得哪裡可以修正？懇請指教。」',type:'A',effect:{data:2,term:2,tension:1},social:{ptt:50,fans:1800}},
+  {text:'大翻白眼🤷‍♂️🤷‍♀️😉',type:'C',effect:{},social:{fans:67}}
 ]},
 
 {id:'s05',label:'場外事件：深夜 PTT 爆料文',isEvent:true,
@@ -479,7 +479,7 @@ const SPECIAL_POOL = [
  roleBonus:{'v18':{optType:'A',bonus:{tension:10,reflex:5}},'v15':{optType:'A',bonus:{tension:8,reflex:5}}},
  options:[
   {text:'立刻開小號在底下護航，談戀愛錯了嘛。😒😒!!!!',type:'B',effect:{speaking:-2,reflex:2,tension:-5},social:{ptt:500,fans:-600}},
-  {text:'關掉手機沉睡，當作沒這件事。',type:'A',effect:{speaking:2,reflex:2,tension:5},social:{ptt:-60,fans:-5000}},
+  {text:'關掉手機沉睡，當作沒這件事。',type:'A',effect:{tension:5},social:{ptt:-60,fans:-50}},
   {text:'心情大受打擊，這明明就是抹黑，躲在棉被裡哭了一整晚。',type:'C',effect:{speaking:-5,tension:-2,reflex:5},social:{ptt:80,fans:-800}}
 ]},
 
@@ -487,9 +487,9 @@ const SPECIAL_POOL = [
  q:'對手陣營的粉絲集體在你的所有貼文底下洗版「退賽」，評論數量衝破五千，你怎麼面對？',
  roleBonus:{'v7':{optType:'A',bonus:{tension:10,speaking:5}},'v12':{optType:'C',bonus:{fans:3000,speaking:8}}},
  options:[
-  {text:'逐一回覆每一則評論為自己辯護，越陷越深。',type:'B',effect:{speaking:-5,tension:-2,reflex:-1},social:{ptt:600,fans:-4000}},
+  {text:'逐一回覆越陷越深，整晚沒有休息。',type:'B',effect:{tension:-2,reflex:-1},social:{ptt:600,fans:-4000}},
   {text:'開啟留言過濾，專注在真心支持你的粉絲身上。',type:'A',effect:{speaking:-2,tension:2,reflex:5},social:{ptt:100,fans:3500}},
-  {text:'直接把帳號設為私人，消失三天後回來。',type:'C',effect:{speaking:-3,tension:5,reflex:8},social:{ptt:150,fans:-200}}
+  {text:'直接把帳號設為私人，消失三天後回來。',type:'C',effect:{speaking:-3,tension:5,reflex:3},social:{ptt:150,fans:-200}}
 ]},
 
 {id:'s11',label:'場外事件：主業很辛苦，要怎麼準備',isEvent:true,
@@ -497,24 +497,24 @@ const SPECIAL_POOL = [
  roleBonus:{'v13':{optType:'A',bonus:{tension:8,data:5}},'v17':{optType:'A',bonus:{tension:5,data:5}}},
  options:[
   {text:'直接放棄準備，去錄影時靠臨場反應硬撐。',type:'B',effect:{speaking:-5,data:-5,term:-2,tension:-2},social:{ptt:100,fans:-800}},
-  {text:'利用通勤時間聽比賽 podcast、午休看球賽數據，把零碎時間全部用上。',type:'A',effect:{speaking:5,data:5,term:8,tension:10,reflex:8},social:{ptt:80,fans:2000}},
-  {text:'跟節目組請假說身體不舒服，先把本業顧好。',type:'C',effect:{speaking:-10,tension:5,reflex:3},social:{ptt:50,fans:-500}}
+  {text:'利用通勤時間聽比賽 podcast、午休看球賽數據，把零碎時間全部用上。',type:'A',effect:{speaking:5,data:5,term:8,tension:1,reflex:8},social:{ptt:80,fans:2000}},
+  {text:'跟節目組請假說身體不舒服，先把本業顧好。',type:'C',effect:{tension:-5,reflex:3},social:{ptt:50,fans:-500}}
 ]},
 
 {id:'s16',label:'場外事件：桃色風波',isEvent:true,
  q:'有八卦媒體拍到你和其他選手在電影院手牽手，隔天標題是「曖昧確定？選手假日幽會」，你怎麼處理？',
  roleBonus:{'v2':{optType:'B',bonus:{fans:5000,speaking:5}},'v11':{optType:'B',bonus:{fans:4000}}},
  options:[
-  {text:'馬上開直播解釋，越說越激動，最後哭出來被截圖。',type:'B',effect:{speaking:-8,tension:-2,reflex:-5},social:{ptt:600,fans:5000}},
-  {text:'發一句簡短聲明：「純屬友人，謝謝關心，請把注意力放在節目本身。」',type:'A',effect:{speaking:8,tension:5,reflex:10},social:{ptt:200,fans:3000}},
-  {text:'完全不回應，讓炒作自然消退，繼續專注練習。',type:'C',effect:{speaking:3,tension:6,reflex:5},social:{ptt:300,fans:2000}}
+  {text:'馬上開直播解釋，越說越激動，最後哭出來被截圖。',type:'B',effect:{tension:-2,reflex:5},social:{ptt:600,fans:5000}},
+  {text:'發一句簡短聲明：「純屬友人，謝謝關心，請把注意力放在節目本身。」',type:'A',effect:{tension:5,reflex:1},social:{ptt:200,fans:3000}},
+  {text:'完全不回應，讓炒作自然消退，繼續專注練習。',type:'C',effect:{speaking:3,tension:2,reflex:5},social:{ptt:300,fans:2000}}
 ]},
 
 {id:'s20',label:'突發狀況：搭檔主播說錯話',isEvent:true,
  q:'你的搭檔主播在直播中把「高飛犧牲打」說成「高飛打打打」，全場一片靜默，你必須立刻接話，你說什麼？',
  roleBonus:{'v9':{optType:'A',bonus:{speaking:8,reflex:8}},'v25':{optType:'A',bonus:{speaking:5,reflex:5}}},
  options:[
-  {text:'大笑說：「哈哈我搭檔在裝可愛！」把尷尬完全轉移到搭檔身上。',type:'B',effect:{speaking:5,reflex:8,tension:-15,term:-5},social:{ptt:400,fans:2000}},
+  {text:'大笑說：「哈哈我搭檔在裝可愛！」把尷尬完全轉移到搭檔身上。',type:'B',effect:{speaking:5,reflex:8,tension:-1,term:-5},social:{ptt:400,fans:2000}},
   {text:'無縫接話：「也就是說三壘跑者用這支高飛犧牲打順利回本壘得分——」完全覆蓋過去。',type:'A',effect:{speaking:8,reflex:5,tension:6,term:5},social:{ptt:100,fans:3500}},
   {text:'沉默兩秒，尷尬地繼續播報下一球，當作沒聽到。',type:'C',effect:{speaking:-3,reflex:-5,tension:5,term:3},social:{ptt:180,fans:-500}}
 ]},
@@ -523,8 +523,8 @@ const SPECIAL_POOL = [
  q:'直播進行中，你看到彈幕洗版「這個播報怎麼這麼無聊」「我來也行」，而且越來越多，你怎麼應對？',
  roleBonus:{'v6':{optType:'B',bonus:{fans:3500,speaking:8}},'v11':{optType:'B',bonus:{fans:3000,speaking:5}}},
  options:[
-  {text:'在直播中直接說：「有些人覺得我無聊，那我表演一下怎樣叫有趣。」開始誇張模仿搞笑播報。',type:'B',effect:{speaking:8,reflex:5,tension:-15,term:-12},social:{ptt:400,fans:300}},
-  {text:'無視彈幕，專注在比賽節奏上，讓下一個精彩時刻的播報自己說話。',type:'A',effect:{speaking:5,reflex:2,tension:8},social:{ptt:100,fans:500}},
+  {text:'在直播中直接說：「有些人覺得我無聊，那我表演一下怎樣叫有趣。」開始誇張模仿搞笑播報。',type:'B',effect:{reflex:5,tension:-1,term:-1},social:{ptt:400,fans:300}},
+  {text:'無視彈幕，專注在比賽節奏上，讓下一個精彩時刻的播報自己說話。',type:'A',effect:{speaking:5,reflex:2,tension:2},social:{ptt:100,fans:500}},
   {text:'偷偷調整一下語調，加了幾個感嘆詞，但整體沒太大改變。',type:'C',effect:{reflex:5,tension:5,term:3},social:{ptt:150,fans:800}}
 ]}
 

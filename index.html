@@ -57,9 +57,9 @@
       <div class="mentor-select-title">熱情系導師</div>
       <div class="mentor-select-desc">巨大聲量，激情四射。</div>
       <div class="mentor-select-bonus">
-        <span class="msb-chip msb-up">數據 +10</span>
-        <span class="msb-chip msb-up">術語 +10</span>
-        <span class="msb-chip msb-down">口條 -5</span>
+        <span class="msb-chip msb-up">數據 +3</span>
+        <span class="msb-chip msb-up">術語 +3</span>
+        <span class="msb-chip msb-down">口條 -2</span>
       </div>
     </div>
     <div class="mentor-select-card" data-mentor="dapangge">
@@ -69,22 +69,21 @@
       <div class="mentor-select-desc">博學多聞，根本就是行走的資料庫</div>
       <div class="mentor-select-bonus">
         <span class="msb-chip msb-up">口條 +2</span>
-        <span class="msb-chip msb-up">數據 +8</span>
-        <span class="msb-chip msb-up">術語 +8</span>
-        <span class="msb-chip msb-up">臨場 +5</span>
+        <span class="msb-chip msb-up">數據 +3</span>
+        <span class="msb-chip msb-up">術語 +3</span>
         <span class="msb-chip msb-down">抗壓 -5</span>
       </div>
     </div>
     <div class="mentor-select-card" data-mentor="ningning">
       <div class="mentor-select-icon">👾</div>
-      <div class="mentor-select-name">吉賽兒</div>
+      <div class="mentor-select-name">卡寶</div>
       <div class="mentor-select-title">節奏流導師</div>
       <div class="mentor-select-desc">感性直覺，專注呼吸換氣、語速控制與高潮張力。</div>
       <div class="mentor-select-bonus">
-        <span class="msb-chip msb-up">口條 +10</span>
+        <span class="msb-chip msb-up">口條 +1</span>
         <span class="msb-chip msb-up">臨場 +5</span>
-        <span class="msb-chip msb-up">抗壓 +8</span>
-        <span class="msb-chip msb-down">數據 -8</span>
+        <span class="msb-chip msb-up">抗壓 -2</span>
+        <span class="msb-chip msb-down">數據 -2</span>
       </div>
     </div>
   </div>
@@ -256,36 +255,48 @@
 
   <div class="divider"></div>
 
-  <!-- 📊 五角戰力總結 -->
+  <!-- 3. 五角戰力總結（可點擊展開/收折） -->
   <div class="section-title">五角戰力總結</div>
-  <div class="stats-panel" style="margin-bottom:20px;">
-    <div class="stat-row">
-      <div class="stat-name">口條</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-speaking" id="rb-speaking" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-speaking">0</div>
+  <div class="dropdown-status-card" id="result-status-dropdown-btn">
+    <div class="dsc-header">
+      <div class="dsc-title-area">
+        <span class="dsc-subtitle">五角能力分析</span>
+        <span class="dsc-main-title" id="r-dsc-summary">點擊查看詳細五角戰力分佈</span>
+      </div>
+      <div class="dsc-arrow">▼</div>
     </div>
-    <div class="stat-row">
-      <div class="stat-name">臨場</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-reflex" id="rb-reflex" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-reflex">0</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">數據</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-data" id="rb-data" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-data">0</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">術語</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-term" id="rb-term" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-term">0</div>
-    </div>
-    <div class="stat-row">
-      <div class="stat-name">抗壓</div>
-      <div class="stat-bar-bg"><div class="stat-bar-fill bar-tension" id="rb-tension" style="width:0%"></div></div>
-      <div class="stat-val" id="rv-tension">0</div>
+    
+    <!-- 展開後的五角戰力條 -->
+    <div class="dsc-content" id="r-dsc-content">
+      <div class="stats-panel" style="margin-bottom:0; border:none; background:transparent;">
+        <div class="stat-row">
+          <div class="stat-name">口條</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-speaking" id="rb-speaking" style="width:0%"></div></div>
+          <div class="stat-val" id="rv-speaking">0</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-name">臨場</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-reflex" id="rb-reflex" style="width:0%"></div></div>
+          <div class="stat-val" id="rv-reflex">0</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-name">數據</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-data" id="rb-data" style="width:0%"></div></div>
+          <div class="stat-val" id="rv-data">0</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-name">術語</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-term" id="rb-term" style="width:0%"></div></div>
+          <div class="stat-val" id="rv-term">0</div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-name">抗壓</div>
+          <div class="stat-bar-bg"><div class="stat-bar-fill bar-tension" id="rb-tension" style="width:0%"></div></div>
+          <div class="stat-val" id="rv-tension">0</div>
+        </div>
+      </div>
     </div>
   </div>
-
   <!-- 🎙 播報風格分析 -->
   <div class="section-title">播報風格分析</div>
   <div class="style-analysis-card" id="style-analysis-card">
