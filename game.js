@@ -97,7 +97,14 @@ function enterGame() {
 document.addEventListener('DOMContentLoaded', () => {
   const introEl = document.getElementById('intro-screen');
   if (introEl) introEl.classList.remove('active');
-
+  
+  const resultStatusCard = document.getElementById('result-status-dropdown-btn');
+  if (resultStatusCard) {
+    resultStatusCard.addEventListener('click', () => {
+      resultStatusCard.classList.toggle('open');
+    });
+  }
+  
   const closeBtn = document.getElementById('card-modal-close');
   if (closeBtn) {
     closeBtn.addEventListener('click', () => {
@@ -246,26 +253,51 @@ function getTimer(stage) {
 
 function calcRanking() {
   const statSum = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
-  const mentorScoreVal = mentorScore[selectedMentor] || 50;
-  const mentorBonus = (mentorScoreVal - 50) * 0.5;
-
-  // 🎯 策略核心：打破無腦全選 A！
+  const minStat = Math.min(...STAT_KEYS.map(k => stats[k] || 0));
+  let balancePenalty = 0;
+  // 如果有致命死穴（單項低於 45 分，例如數據 33 分），重扣 40 分防止偏科拿第一！
+  if (minStat < 45) {
+    balancePenalty = 40;
+  } else if (minStat < 55) {
+    balancePenalty = 15;
+  }
+  // 🎯 策略核心：三位一體「反無腦機制」！
   let styleBonus = 0;
-  // 1. 如果無腦全選 A 超過 4 次，判定為「缺乏個人特色、過度死板保守」，不給紅利
+
+  // 1. 無腦全選 A（死板機器人）：選 A 超過 4 次且完全不選 B/C
   if (styleCounter.A >= 4 && styleCounter.B === 0 && styleCounter.C === 0) {
     styleBonus = -15; 
   }
-  // 2. 如果懂得靈活切換風格（既有專業 A，又有激情 B 或娛樂 C），獎勵「風格多樣性」！
-  else if (styleCounter.A >= 2 && (styleCounter.B >= 1 || styleCounter.C >= 1)) {
-    styleBonus = 15;
+  // 2. 🚨 新增：無腦狂選 B（暴走狂躁派）：整場大吼大叫超過 3 次
+  else if (styleCounter.B >= 3 && styleCounter.A <= 1) {
+    styleBonus = -20; // 評審評語：失去中立性與專業克制，淪為球迷自嗨
   }
-
-  // 3. 粉絲數換算成選秀聲量分數（選 B/C 吸粉多的人，能靠人氣逆襲奪冠！）
+  // 3. 🚨 新增：無腦狂選 C（神棍算命派）：整場瞎猜預測超過 3 次
+  else if (styleCounter.C >= 3 && styleCounter.A <= 1) {
+    styleBonus = -20; // 評審評語：毫無數據根據，把正式轉播當綜藝秀
+  }
+  // 4. 🌟 獎勵：文武雙全！以專業 A 為底，懂得適時爆發 B 或製造綜藝 C
+  else if (styleCounter.A >= 2 && (styleCounter.B >= 1 || styleCounter.C >= 1)) {
+    styleBonus = 15; // 評審評語：風格靈活多變，深具大將之風！
+  }
+ 
   const fanBonus = Math.min(25, Math.floor(fans / 500)); 
 
-  const playerFinalScore = statSum + mentorBonus + styleBonus + fanBonus;
+  // 最終核算總分：扣除偏科懲罰，加上風格紅利與人氣加成
+  const playerFinalScore = Math.max(0, statSum - balancePenalty + styleBonus + fanBonus);
 
   return npcs.filter(n => n.total > playerFinalScore).length + 1;
+}
+
+function updateRankDisplayOnPanel() {
+  const rank  = calcRanking();
+  const total = npcs.length + 1;
+  const summaryEl = document.getElementById('dsc-player-summary');
+  
+  if (summaryEl) {
+    const totalStats = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
+    summaryEl.textContent = '綜合戰力：' + totalStats + ' | 目前排名 #' + rank + '/' + total;
+  }
 }
 
 function updateRankDisplayOnPanel() {
@@ -295,10 +327,10 @@ function calcMentorDelta(optType) {
   const mentor = getMentor();
   if (!mentor) return 0;
   let delta = 0;
-  mentor.likes.forEach(k    => { if (stats[k] >= 60) delta += 3; });
+  mentor.likes.forEach(k    => { if (stats[k] >= 60) delta += 2; });
   mentor.dislikes.forEach(k => { if (stats[k] >= 70) delta -= 2; });
-  if (optType === mentor.optBonus)   delta += 3;
-  if (optType === mentor.optPenalty) delta -= 3;
+   if (mentor.optBonus && mentor.optBonus.includes(optType)) {delta += 2;}
+  if (optType === mentor.optPenalty) delta -= 2;
   return delta;
 }
 
