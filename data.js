@@ -471,33 +471,33 @@ const SPECIAL_POOL = [
  options:[
   {text:'不服氣回嗆：「不然你來教我啊？」',type:'B',effect:{speaking:10,reflex:-8,tension:-15},social:{ptt:150,fans:-1200}},
   {text:'虛心請教：「前輩覺得哪裡可以修正？懇請指教。」',type:'A',effect:{data:12,term:12,tension:10,speaking:3},social:{ptt:50,fans:1800}},
-  {text:'大翻白眼',type:'C',effect:{tension:5,speaking:3,data:-5},social:{ptt:10,fans:200}}
+  {text:'大翻白眼🤷‍♂️🤷‍♀️😉',type:'C',effect:{tension:5,speaking:3,data:-5},social:{ptt:10,fans:200}}
 ]},
 
 {id:'s05',label:'場外事件：深夜 PTT 爆料文',isEvent:true,
  q:'半夜被爆料，與某隊選手深夜共進消夜，你會怎麼面對？',
  roleBonus:{'v18':{optType:'A',bonus:{tension:10,reflex:5}},'v15':{optType:'A',bonus:{tension:8,reflex:5}}},
  options:[
-  {text:'立刻開小號在底下護航，談戀愛錯了嘛!!!!!',type:'B',effect:{speaking:-12,reflex:-18,tension:-28},social:{ptt:500,fans:-6000}},
-  {text:'關掉手機沉睡，當作沒這件事。',type:'A',effect:{speaking:2,reflex:12,tension:22,data:5},social:{ptt:-60,fans:-5000}},
-  {text:'心情大受打擊，這明明就是抹黑，躲在棉被裡哭了一整晚。',type:'C',effect:{speaking:-10,tension:-20,reflex:5},social:{ptt:80,fans:-800}}
+  {text:'立刻開小號在底下護航，談戀愛錯了嘛。😒😒!!!!',type:'B',effect:{speaking:-2,reflex:2,tension:-5},social:{ptt:500,fans:-600}},
+  {text:'關掉手機沉睡，當作沒這件事。',type:'A',effect:{speaking:2,reflex:2,tension:5},social:{ptt:-60,fans:-5000}},
+  {text:'心情大受打擊，這明明就是抹黑，躲在棉被裡哭了一整晚。',type:'C',effect:{speaking:-5,tension:-2,reflex:5},social:{ptt:80,fans:-800}}
 ]},
 
 {id:'s08',label:'場外事件：被對手粉絲出征',isEvent:true,
  q:'對手陣營的粉絲集體在你的所有貼文底下洗版「退賽」，評論數量衝破五千，你怎麼面對？',
  roleBonus:{'v7':{optType:'A',bonus:{tension:10,speaking:5}},'v12':{optType:'C',bonus:{fans:3000,speaking:8}}},
  options:[
-  {text:'逐一回覆每一則評論為自己辯護，越陷越深。',type:'B',effect:{speaking:-5,tension:-25,reflex:-10},social:{ptt:600,fans:-4000}},
-  {text:'開啟留言過濾，專注在真心支持你的粉絲身上。',type:'A',effect:{speaking:-3,tension:20,reflex:5},social:{ptt:100,fans:3500}},
-  {text:'直接把帳號設為私人，消失三天後回來。',type:'C',effect:{speaking:-3,tension:12,reflex:8},social:{ptt:150,fans:-500}}
+  {text:'逐一回覆每一則評論為自己辯護，越陷越深。',type:'B',effect:{speaking:-5,tension:-2,reflex:-1},social:{ptt:600,fans:-4000}},
+  {text:'開啟留言過濾，專注在真心支持你的粉絲身上。',type:'A',effect:{speaking:-2,tension:2,reflex:5},social:{ptt:100,fans:3500}},
+  {text:'直接把帳號設為私人，消失三天後回來。',type:'C',effect:{speaking:-3,tension:5,reflex:8},social:{ptt:150,fans:-200}}
 ]},
 
 {id:'s11',label:'場外事件：主業很辛苦，要怎麼準備',isEvent:true,
  q:'節目錄影前三天，你的本業突然接到大案子，加班到深夜，根本沒時間準備播報功課，你怎麼辦？',
  roleBonus:{'v13':{optType:'A',bonus:{tension:8,data:5}},'v17':{optType:'A',bonus:{tension:5,data:5}}},
  options:[
-  {text:'直接放棄準備，去錄影時靠臨場反應硬撐。',type:'B',effect:{speaking:-5,data:-15,term:-12,tension:-8},social:{ptt:100,fans:-800}},
-  {text:'利用通勤時間聽比賽 podcast、午休看球賽數據，把零碎時間全部用上。',type:'A',effect:{speaking:5,data:10,term:8,tension:10,reflex:8},social:{ptt:80,fans:2000}},
+  {text:'直接放棄準備，去錄影時靠臨場反應硬撐。',type:'B',effect:{speaking:-5,data:-5,term:-2,tension:-2},social:{ptt:100,fans:-800}},
+  {text:'利用通勤時間聽比賽 podcast、午休看球賽數據，把零碎時間全部用上。',type:'A',effect:{speaking:5,data:5,term:8,tension:10,reflex:8},social:{ptt:80,fans:2000}},
   {text:'跟節目組請假說身體不舒服，先把本業顧好。',type:'C',effect:{speaking:-10,tension:5,reflex:3},social:{ptt:50,fans:-500}}
 ]},
 
@@ -505,9 +505,9 @@ const SPECIAL_POOL = [
  q:'有八卦媒體拍到你和其他選手在電影院手牽手，隔天標題是「曖昧確定？選手假日幽會」，你怎麼處理？',
  roleBonus:{'v2':{optType:'B',bonus:{fans:5000,speaking:5}},'v11':{optType:'B',bonus:{fans:4000}}},
  options:[
-  {text:'馬上開直播解釋，越說越激動，最後哭出來被截圖。',type:'B',effect:{speaking:-8,tension:-22,reflex:-5},social:{ptt:600,fans:5000}},
-  {text:'發一句簡短聲明：「純屬友人，謝謝關心，請把注意力放在節目本身。」',type:'A',effect:{speaking:8,tension:15,reflex:10},social:{ptt:200,fans:3000}},
-  {text:'完全不回應，讓炒作自然消退，繼續專注練習。',type:'C',effect:{speaking:3,tension:10,reflex:5},social:{ptt:300,fans:2000}}
+  {text:'馬上開直播解釋，越說越激動，最後哭出來被截圖。',type:'B',effect:{speaking:-8,tension:-2,reflex:-5},social:{ptt:600,fans:5000}},
+  {text:'發一句簡短聲明：「純屬友人，謝謝關心，請把注意力放在節目本身。」',type:'A',effect:{speaking:8,tension:5,reflex:10},social:{ptt:200,fans:3000}},
+  {text:'完全不回應，讓炒作自然消退，繼續專注練習。',type:'C',effect:{speaking:3,tension:6,reflex:5},social:{ptt:300,fans:2000}}
 ]},
 
 {id:'s20',label:'突發狀況：搭檔主播說錯話',isEvent:true,
@@ -515,17 +515,17 @@ const SPECIAL_POOL = [
  roleBonus:{'v9':{optType:'A',bonus:{speaking:8,reflex:8}},'v25':{optType:'A',bonus:{speaking:5,reflex:5}}},
  options:[
   {text:'大笑說：「哈哈我搭檔在裝可愛！」把尷尬完全轉移到搭檔身上。',type:'B',effect:{speaking:5,reflex:8,tension:-15,term:-5},social:{ptt:400,fans:2000}},
-  {text:'無縫接話：「也就是說三壘跑者用這支高飛犧牲打順利回本壘得分——」完全覆蓋過去。',type:'A',effect:{speaking:18,reflex:20,tension:12,term:15},social:{ptt:100,fans:3500}},
-  {text:'沉默兩秒，尷尬地繼續播報下一球，當作沒聽到。',type:'C',effect:{speaking:-8,reflex:-5,tension:5,term:3},social:{ptt:180,fans:-500}}
+  {text:'無縫接話：「也就是說三壘跑者用這支高飛犧牲打順利回本壘得分——」完全覆蓋過去。',type:'A',effect:{speaking:8,reflex:5,tension:6,term:5},social:{ptt:100,fans:3500}},
+  {text:'沉默兩秒，尷尬地繼續播報下一球，當作沒聽到。',type:'C',effect:{speaking:-3,reflex:-5,tension:5,term:3},social:{ptt:180,fans:-500}}
 ]},
 
 {id:'s23',label:'突發狀況：被嫌播報無聊',isEvent:true,
  q:'直播進行中，你看到彈幕洗版「這個播報怎麼這麼無聊」「我來也行」，而且越來越多，你怎麼應對？',
  roleBonus:{'v6':{optType:'B',bonus:{fans:3500,speaking:8}},'v11':{optType:'B',bonus:{fans:3000,speaking:5}}},
  options:[
-  {text:'在直播中直接說：「有些人覺得我無聊，那我表演一下怎樣叫有趣。」開始誇張模仿搞笑播報。',type:'B',effect:{speaking:8,reflex:5,tension:-15,term:-12},social:{ptt:400,fans:3000}},
-  {text:'無視彈幕，專注在比賽節奏上，讓下一個精彩時刻的播報自己說話。',type:'A',effect:{speaking:15,reflex:12,tension:18,term:10},social:{ptt:100,fans:3500}},
-  {text:'偷偷調整一下語調，加了幾個感嘆詞，但整體沒太大改變。',type:'C',effect:{speaking:3,reflex:5,tension:5,term:3},social:{ptt:150,fans:800}}
+  {text:'在直播中直接說：「有些人覺得我無聊，那我表演一下怎樣叫有趣。」開始誇張模仿搞笑播報。',type:'B',effect:{speaking:8,reflex:5,tension:-15,term:-12},social:{ptt:400,fans:300}},
+  {text:'無視彈幕，專注在比賽節奏上，讓下一個精彩時刻的播報自己說話。',type:'A',effect:{speaking:5,reflex:2,tension:8},social:{ptt:100,fans:500}},
+  {text:'偷偷調整一下語調，加了幾個感嘆詞，但整體沒太大改變。',type:'C',effect:{reflex:5,tension:5,term:3},social:{ptt:150,fans:800}}
 ]}
 
 ];

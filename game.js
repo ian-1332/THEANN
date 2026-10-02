@@ -247,9 +247,23 @@ function getTimer(stage) {
 function calcRanking() {
   const statSum = STAT_KEYS.reduce((s, k) => s + stats[k], 0);
   const mentorScoreVal = mentorScore[selectedMentor] || 50;
-  
-  const mentorBonus = (mentorScoreVal - 50) * 2.0; 
-  const playerFinalScore = statSum + mentorBonus;
+  const mentorBonus = (mentorScoreVal - 50) * 0.5;
+
+  // 🎯 策略核心：打破無腦全選 A！
+  let styleBonus = 0;
+  // 1. 如果無腦全選 A 超過 4 次，判定為「缺乏個人特色、過度死板保守」，不給紅利
+  if (styleCounter.A >= 4 && styleCounter.B === 0 && styleCounter.C === 0) {
+    styleBonus = -15; 
+  }
+  // 2. 如果懂得靈活切換風格（既有專業 A，又有激情 B 或娛樂 C），獎勵「風格多樣性」！
+  else if (styleCounter.A >= 2 && (styleCounter.B >= 1 || styleCounter.C >= 1)) {
+    styleBonus = 15;
+  }
+
+  // 3. 粉絲數換算成選秀聲量分數（選 B/C 吸粉多的人，能靠人氣逆襲奪冠！）
+  const fanBonus = Math.min(25, Math.floor(fans / 500)); 
+
+  const playerFinalScore = statSum + mentorBonus + styleBonus + fanBonus;
 
   return npcs.filter(n => n.total > playerFinalScore).length + 1;
 }
@@ -588,9 +602,9 @@ function chooseOption(idx) {
 
   let mult = 1.0;
   if (opt.type === 'A' && seconds > 0 && diff) {
-    mult = diff.mult;
+    mult = Math.min(1.15, diff.mult * 0.8);
     const ratio = timeLeft / seconds;
-    if      (ratio > 0.65) mult *= 1.2;
+    if      (ratio > 0.70) mult *= 1.1; // 神速作答微加 10%
     else if (ratio < 0.25) mult *= 0.9;
   }
 
@@ -625,7 +639,11 @@ function applyEffect(eff, social, optType, mult = 1) {
   STAT_KEYS.forEach(k => before[k] = stats[k]);
 
   STAT_KEYS.forEach(k => {
-    if (eff[k]) stats[k] = Math.round(stats[k] + eff[k] * mult);
+  if (eff[k]) {
+      let delta = Math.round(eff[k] * mult);
+      delta = Math.max(-12, Math.min(10, delta));
+      stats[k] += delta;
+    }
     stats[k] = Math.max(0, Math.min(100, stats[k]));
   });
 
